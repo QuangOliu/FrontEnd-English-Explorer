@@ -1,0 +1,8 @@
+[build]
+  command = "npm run build"  # Thay thế bằng lệnh xây dựng của dự án của bạn
+  publish = "build"  # Thay thế bằng đường dẫn nơi tệp xây dựng (build output) của dự án được lưu trữ
+
+[build.environment]
+  NODE_VERSION = "16"  # Thiết lập phiên bản Node.js thành 16
+
+# Các cài đặt khác của Netlify (nếu có)
