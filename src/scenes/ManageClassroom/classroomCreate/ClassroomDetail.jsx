@@ -1,6 +1,6 @@
 import { useTheme } from '@emotion/react'
 import MailIcon from '@mui/icons-material/Mail'
-import InboxIcon from '@mui/icons-material/MoveToInbox'
+import HomeIcon from '@mui/icons-material/Home'
 import Box from '@mui/material/Box'
 import CssBaseline from '@mui/material/CssBaseline'
 import Divider from '@mui/material/Divider'
@@ -11,27 +11,30 @@ import ListItemButton from '@mui/material/ListItemButton'
 import ListItemIcon from '@mui/material/ListItemIcon'
 import ListItemText from '@mui/material/ListItemText'
 import Toolbar from '@mui/material/Toolbar'
-import Typography from '@mui/material/Typography'
+import classroomApi from 'api/classroomApi'
 import PropTypes from 'prop-types'
 import * as React from 'react'
-import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useState, useEffect } from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
+import Bulletin from './Bulletin'
+import ExamList from './ExamList'
+import MemberList from '../Members/MemberList'
 
 const drawerWidth = 240
 
 const sidebarManu = [
     {
-        text: 'Dashboard',
+        text: 'Exams',
         icon: <MailIcon />,
         id: 1,
     },
     {
-        text: 'Dashboard',
+        text: 'Member',
         icon: <MailIcon />,
         id: 2,
     },
     {
-        text: 'Dashboard',
+        text: 'General',
         icon: <MailIcon />,
         id: 3,
     },
@@ -40,8 +43,10 @@ const sidebarManu = [
 function ResponsiveDrawer(props) {
     const { window } = props
     const [mobileOpen, setMobileOpen] = useState(false)
+    const [classroom, setclassroom] = useState({})
     const [isClosing, setIsClosing] = useState(false)
-    const [typeContent, setTypeContent] = useState(0)
+    const [typeContent, setTypeContent] = useState(1)
+    const { classroomId } = useParams()
 
     const handleDrawerClose = () => {
         setIsClosing(true)
@@ -52,11 +57,16 @@ function ResponsiveDrawer(props) {
         setIsClosing(false)
     }
 
-    const handleDrawerToggle = () => {
-        if (!isClosing) {
-            setMobileOpen(!mobileOpen)
-        }
-    }
+    useEffect(() => {
+        classroomApi
+            .getById(classroomId)
+            .then((result) => {
+                setclassroom(result)
+            })
+            .catch((err) => {
+                console.log(err)
+            })
+    }, [classroomId])
 
     const handleClickSideBar = (id) => {
         setTypeContent(id)
@@ -68,6 +78,14 @@ function ResponsiveDrawer(props) {
     const drawer = (
         <div>
             <Toolbar />
+            <ListItem disablePadding>
+                <ListItemButton onClick={() => navigate('/')}>
+                    <ListItemIcon>
+                        <HomeIcon />
+                    </ListItemIcon>
+                    <ListItemText primary={'Home'} />
+                </ListItemButton>
+            </ListItem>
             <Divider />
             <List>
                 {sidebarManu.map((item, index) => (
@@ -81,22 +99,8 @@ function ResponsiveDrawer(props) {
                     </ListItem>
                 ))}
             </List>
-            <Divider />
-            <List>
-                {['All mail', 'Trash', 'Spam'].map((text, index) => (
-                    <ListItem key={text} disablePadding>
-                        <ListItemButton>
-                            <ListItemIcon>
-                                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                            </ListItemIcon>
-                            <ListItemText primary={text} />
-                        </ListItemButton>
-                    </ListItem>
-                ))}
-            </List>
         </div>
     )
-
     // Remove this const when copying and pasting into your project.
     const container =
         window !== undefined ? () => window().document.body : undefined
@@ -147,67 +151,20 @@ function ResponsiveDrawer(props) {
                     {drawer}
                 </Drawer>
             </Box>
+
             <Box
-                onClick={() => {
-                    navigate('/')
-                }}
+                component="main"
                 sx={{
-                    paddingTop: '20px',
-                    '&:hover': {
-                        color: palette.primary.main,
-                        cursor: 'pointer',
-                    },
+                    flexGrow: 1,
+                    p: 3,
+                    width: { sm: `calc(100% - ${drawerWidth}px)` },
                 }}
             >
-                Home/Item
+                <Toolbar />
+                {typeContent === 1 && <ExamList classroomId={classroomId} />}
+                {typeContent === 2 && <MemberList classroomId={classroomId} />}
+                {typeContent === 3 && <Bulletin classroom={classroom} />}
             </Box>
-            {typeContent === 1 && (
-                <Box
-                    component="main"
-                    sx={{
-                        flexGrow: 1,
-                        p: 3,
-                        width: { sm: `calc(100% - ${drawerWidth}px)` },
-                    }}
-                >
-                    <Toolbar />
-                    <Typography sx={{ marginBottom: 2 }}>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                        sed do eiusmod tempor incididunt ut labore et dolore
-                        magna aliqua. Rhoncus dolor purus non enim praesent
-                        elementum facilisis leo vel. Risus at ultrices mi tempus
-                        imperdiet. Semper risus in hendrerit gravida rutrum
-                        quisque non tellus. Convallis convallis tellus id
-                        interdum velit laoreet id donec ultrices. Odio morbi
-                        quis commodo odio aenean sed adipiscing. Amet nisl
-                        suscipit adipiscing bibendum est ultricies integer quis.
-                        Cursus euismod quis viverra nibh cras. Metus vulputate
-                        eu scelerisque felis imperdiet proin fermentum leo.
-                        Mauris commodo quis imperdiet massa tincidunt. Cras
-                        tincidunt lobortis feugiat vivamus at augue. At augue
-                        eget arcu dictum varius duis at consectetur lorem. Velit
-                        sed ullamcorper morbi tincidunt. Lorem donec massa
-                        sapien faucibus et molestie ac.
-                    </Typography>
-                    <Typography sx={{ marginBottom: 2 }}>
-                        Consequat mauris nunc congue nisi vitae suscipit.
-                        Fringilla est ullamcorper eget nulla facilisi etiam
-                        dignissim diam. Pulvinar elementum integer enim neque
-                        volutpat ac tincidunt. Ornare suspendisse sed nisi lacus
-                        sed viverra tellus. Purus sit amet volutpat consequat
-                        mauris. Elementum eu facilisis sed odio morbi. Euismod
-                        lacinia at quis risus sed vulputate odio. Morbi
-                        tincidunt ornare massa eget egestas purus viverra
-                        accumsan in. In hendrerit gravida rutrum quisque non
-                        tellus orci ac. Pellentesque nec nam aliquam sem et
-                        tortor. Habitant morbi tristique senectus et. Adipiscing
-                        elit duis tristique sollicitudin nibh sit. Ornare aenean
-                        euismod elementum nisi quis eleifend. Commodo viverra
-                        maecenas accumsan lacus vel facilisis. Nulla posuere
-                        sollicitudin aliquam ultrices sagittis orci a.
-                    </Typography>
-                </Box>
-            )}
         </Box>
     )
 }

@@ -29,6 +29,7 @@ import QuestionCreate from "scenes/questionCreate";
 import ClassroomCreate from "scenes/ManageClassroom/classroomCreate/FormCreate";
 import ManageClassroom from "scenes/ManageClassroom";
 import ClassroomDetail from "scenes/ManageClassroom/classroomCreate/ClassroomDetail";
+import ExamForm from "scenes/ManageClassroom/Exam/ExamForm";
 
 function App() {
   const mode = useSelector((state) => state.mode);
@@ -90,10 +91,15 @@ function App() {
               </Route> 
               <Route path='/classrooms'>
                   <Route path='create' element={<ClassroomCreate />} />
-                  <Route path='edit/:questionId' element={<ClassroomCreate />} />
-                  <Route path=':questionId' element={<ClassroomDetail />} />
+                  <Route path='edit/:classroomId' element={<ClassroomCreate />} />
+                  <Route path=':classroomId' element={<ClassroomDetail />} />
                   <Route index element=<ManageClassroom /> />
               </Route>
+              
+              <Route path='/exam'>
+                  <Route path=':examId' element={<ExamForm />} />
+              </Route> 
+
               <Route path='/orders'>
                 <Route path=':orderId' element={<OrderDetail />} />
               </Route>

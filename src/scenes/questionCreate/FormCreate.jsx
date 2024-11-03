@@ -23,7 +23,7 @@ import { useParams } from 'react-router-dom'
 const skillTypes = ['READING', 'WRITING', 'LISTENING', 'SPEAKING']
 const levelTypes = ['BEGINNER', 'INTERMEDIATE', 'ADVANCED']
 
-const QuestionForm = () => {
+const QuestionForm = ({question, onChange}) => {
     const [imageUrl, setImageUrl] = useState('')
     const [audioUrl, setAudioUrl] = useState('')
     const [pageType, setPageType] = useState('add')

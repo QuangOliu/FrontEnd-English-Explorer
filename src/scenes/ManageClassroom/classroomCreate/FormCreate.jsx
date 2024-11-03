@@ -42,7 +42,7 @@ const ClassroomCreate = () => {
             classroomApi.create(formValues).then((result) => {
                 setFormValues((prevValues) => ({
                     ...prevValues,
-                    id: questionId,
+                    id: classroomId,
                 }))
 
                 toast.success('Successfully Create Question!')
@@ -61,13 +61,13 @@ const ClassroomCreate = () => {
         setErrors(newErrors)
         return Object.keys(newErrors).length === 0 // Trả về true nếu không có lỗi
     }
-    const { questionId } = useParams()
+    const { classroomId } = useParams()
 
     useEffect(() => {
-        if (questionId) {
+        if (classroomId) {
             setPageType('edit')
             classroomApi
-                .getById(questionId)
+                .getById(classroomId)
                 .then((result) => {
                     console.log(result)
                     return result
@@ -75,7 +75,7 @@ const ClassroomCreate = () => {
                 .then((result) => {
                     setFormValues((prevValues) => ({
                         ...prevValues,
-                        id: questionId,
+                        id: classroomId,
                         user: result.user,
                         accessType: result.accessType,
                         name: result.name,
@@ -96,7 +96,7 @@ const ClassroomCreate = () => {
         } else {
             setPageType('add')
         }
-    }, [questionId])
+    }, [classroomId])
 
     return (
         <Box sx={{ mx: 'auto', p: 2 }}>

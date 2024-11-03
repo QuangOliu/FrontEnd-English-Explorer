@@ -22,12 +22,11 @@ import TableBody from '@mui/material/TableBody'
 import TableContainer from '@mui/material/TableContainer'
 import TableHead from '@mui/material/TableHead'
 import TableRow from '@mui/material/TableRow'
-import userApi from 'api/userApi'
 import StyledTableCell from 'components/StyledTableCell'
 import StyledTableRow from 'components/StyledTableRow'
 import { useState } from 'react'
 import { useSelector } from 'react-redux'
-import { Link, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 const head = [
     {
