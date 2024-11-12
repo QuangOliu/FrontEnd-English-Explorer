@@ -95,7 +95,7 @@ function ExamList({ classroomId }) {
 
     // Function to navigate to exam detail page
     const handleEditClick = (examId) => {
-        navigate(`/exam/${examId}`)
+        navigate(`/exam/detail/${examId}`)
     }
 
     return (

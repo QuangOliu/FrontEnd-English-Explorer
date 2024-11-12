@@ -275,7 +275,7 @@ function TableClassroom({ data, btn, submitDelete }) {
                                                 <IconButton
                                                     onClick={() => {
                                                         navigate(
-                                                            `/classrooms/edit/${row.id}`
+                                                            `/manage/classrooms/edit/${row.id}`
                                                         )
                                                     }}
                                                     size="large"

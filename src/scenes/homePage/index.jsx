@@ -7,9 +7,9 @@ const HomePage = () => {
   return (
     <Box>
       {/* <MainCarousel /> */}
-      <Box mb={"80px"} />
+      {/* <Box mb={"80px"} /> */}
       <QuestionList />
-      <Subscribe />
+      {/* <Subscribe /> */}
     </Box>
   );
 };

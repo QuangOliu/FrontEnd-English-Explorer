@@ -12,7 +12,7 @@ import {
     Grid,
     Typography,
 } from '@mui/material'
-import toast, { Toaster } from 'react-hot-toast';
+import toast, { Toaster } from 'react-hot-toast'
 import axios from 'axios'
 import { useTheme } from '@emotion/react'
 import questionApi from 'api/questionApi'
@@ -23,7 +23,7 @@ import { useParams } from 'react-router-dom'
 const skillTypes = ['READING', 'WRITING', 'LISTENING', 'SPEAKING']
 const levelTypes = ['BEGINNER', 'INTERMEDIATE', 'ADVANCED']
 
-const QuestionForm = ({question, onChange}) => {
+const QuestionForm = ({ question, onChange }) => {
     const [imageUrl, setImageUrl] = useState('')
     const [audioUrl, setAudioUrl] = useState('')
     const [pageType, setPageType] = useState('add')
@@ -70,7 +70,7 @@ const QuestionForm = ({question, onChange}) => {
                 choises: [...prev.choises, { answer: '', correct: false }],
             }))
         } else {
-            toast.error('You can only add up to 4 choices.');
+            toast.error('You can only add up to 4 choices.')
         }
     }
 
@@ -114,7 +114,6 @@ const QuestionForm = ({question, onChange}) => {
         if (!formValues.question) newErrors.question = 'Question is required'
         if (!formValues.skill) newErrors.skill = 'Skill is required'
         if (!formValues.level) newErrors.level = 'Level is required'
-
         if (formValues.skill === 'LISTENING') {
             if (!formValues.image)
                 newErrors.image = 'Image is required for Listening'
@@ -123,20 +122,22 @@ const QuestionForm = ({question, onChange}) => {
         }
 
         if (formValues.choises.length === 0) {
+            debugger
             newErrors.choises = 'At least one choice is required'
         } else {
-            let hasTrueAnswer = false;
+            debugger
+            let hasTrueAnswer = false
             formValues.choises.forEach((choice, index) => {
                 if (!choice.answer) {
                     newErrors[`choice${index}`] = 'Answer is required'
                 }
-                if(choice.correct === true) {
-                    hasTrueAnswer = true;
+                if (choice.correct === true) {
+                    hasTrueAnswer = true
                 }
             })
             if (!hasTrueAnswer) {
                 newErrors['choice1'] = 'The question has a true answer.'
-                toast.error("The question has a true answer.");
+                toast.error('The question has a true answer.')
             }
         }
 
@@ -152,7 +153,7 @@ const QuestionForm = ({question, onChange}) => {
                     ...prevValues,
                     id: questionId,
                 }))
-                
+
                 toast.success('Successfully Create Question!')
             })
         }
@@ -162,7 +163,7 @@ const QuestionForm = ({question, onChange}) => {
         const fileName = fileUrl.split('/').pop() // Lấy tên file từ URL
         try {
             const response = await fileApi.deleteFile(fileName) // Gọi API xóa file
-            
+
             toast.success(`${fileType} đã được gỡ bỏ.`)
             setFormValues((prev) => ({ ...prev, [fileType]: '' })) // Reset giá trị của file
         } catch (error) {
@@ -214,18 +215,15 @@ const QuestionForm = ({question, onChange}) => {
                         <Typography variant="h6" gutterBottom>
                             Upload Files
                         </Typography>
-                        {formValues.skill === 'LISTENING' && (
-                            <Box>
-                                <input
-                                    type="file"
-                                    accept="image/*"
-                                    onChange={(e) =>
-                                        handleFileUpload(
-                                            e.target.files[0],
-                                            'image'
-                                        )
-                                    }
-                                />
+                        <Box>
+                            <input
+                                type="file"
+                                accept="image/*"
+                                onChange={(e) =>
+                                    handleFileUpload(e.target.files[0], 'image')
+                                }
+                            />
+                            {formValues.skill === 'LISTENING' && (
                                 <input
                                     type="file"
                                     accept="audio/*"
@@ -236,17 +234,17 @@ const QuestionForm = ({question, onChange}) => {
                                         )
                                     }
                                 />
-                            </Box>
-                        )}
+                            )}
+                        </Box>
 
                         {formValues.image ? (
-                            <>
+                            <Box>
                                 <img
                                     src={`http://localhost:8080/api/v1/files/${formValues.image}`}
                                     alt="Uploaded"
                                     style={{ maxWidth: '100%' }}
                                 />
-                                <button
+                                <Button
                                     onClick={() =>
                                         handleRemoveFile(
                                             formValues.image,
@@ -255,12 +253,12 @@ const QuestionForm = ({question, onChange}) => {
                                     }
                                 >
                                     Gỡ ảnh
-                                </button>
-                            </>
+                                </Button>
+                            </Box>
                         ) : null}
                         {formValues.audio ? (
-                            <>
-                                <audio controls>
+                            <Box>
+                                <audio controls style={{display: "block"}}>
                                     <source
                                         src={`http://localhost:8080/api/v1/files/${formValues.audio}`}
                                         type="audio/mpeg"
@@ -268,7 +266,7 @@ const QuestionForm = ({question, onChange}) => {
                                     Your browser does not support the audio
                                     element.
                                 </audio>
-                                <button
+                                <Button
                                     onClick={() =>
                                         handleRemoveFile(
                                             formValues.audio,
@@ -277,8 +275,8 @@ const QuestionForm = ({question, onChange}) => {
                                     }
                                 >
                                     Gỡ audio
-                                </button>
-                            </>
+                                </Button>
+                            </Box>
                         ) : null}
                     </Box>
                 </Grid>

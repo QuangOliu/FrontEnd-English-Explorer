@@ -1,4 +1,4 @@
-import { Typography } from '@mui/material'
+import { Typography, Button, IconButton } from '@mui/material'
 import Box from '@mui/material/Box'
 import Tab from '@mui/material/Tab'
 import Tabs from '@mui/material/Tabs'
@@ -6,23 +6,21 @@ import useMediaQuery from '@mui/material/useMediaQuery'
 import productApi from 'api/productApi'
 import { useEffect, useState } from 'react'
 import { shades } from '../../theme'
-import Item from '../../components/Item'
-import { useDispatch } from 'react-redux'
-import { setProducts } from 'state'
+import QuestionDetail from 'components/QuestionDetail'
+import { Favorite, Bookmark, Share } from '@mui/icons-material'
 
 const ShoppingList = () => {
     const [value, setValue] = useState('all')
     const [items, setItems] = useState([])
+    const [indexQuestion, setIndexQuestion] = useState(0)
     const [loading, setLoading] = useState(true)
     const breakPoint = useMediaQuery('(min-width: 1000px)')
-    const dispatch = useDispatch()
 
     useEffect(() => {
         productApi
             .getAllProduct()
             .then((result) => {
                 setItems(result)
-                dispatch(setProducts(result))
                 setLoading(false)
             })
             .catch((err) => {
@@ -30,16 +28,19 @@ const ShoppingList = () => {
             })
     }, [])
 
-    // const dispatch = useDispatch();
-
     const handleChange = (event, newValue) => {
         setValue(newValue)
     }
-    const topRatedItems = items.filter((item) => item.category === 'spring')
-    const newArrivalsItems = items.filter(
-        (item) => item.category === 'newArrivals'
-    )
-    const bestSellersItems = items.filter((item) => item.category === 'fall')
+
+    const handleNextQuestion = () => {
+        setIndexQuestion((prevIndex) => (prevIndex + 1) % items.length)
+    }
+
+    const handlePreviousQuestion = () => {
+        setIndexQuestion((prevIndex) => 
+            prevIndex === 0 ? items.length - 1 : prevIndex - 1
+        )
+    }
 
     return (
         <Box margin="80px auto">
@@ -68,36 +69,42 @@ const ShoppingList = () => {
                 <Tab label="Fall" value="bestSellers" />
                 <Tab label="Spring" value="topRated" />
             </Tabs>
+
             {!loading && (
                 <Box
                     margin="0 auto"
                     display="grid"
-                    gridTemplateColumns="repeat(auto-fill, 300px)"
-                    justifyContent="space-around"
-                    rowGap="20px"
-                    columnGap="1.33%"
+                    gridTemplateColumns="1fr auto"
+                    gap="20px"
                 >
-                    {value === 'all' &&
-                        items.map((item) => (
-                            <Item
-                                item={item}
-                                key={`${item.name}-${item._id}`}
-                            />
-                        ))}
-                    {value === 'newArrivals' &&
-                        newArrivalsItems.map((item) => (
-                            <Item item={item} key={`newArrivals-${item._id}`} />
-                        ))}
-                    {value === 'bestSellers' &&
-                        bestSellersItems.map((item) => (
-                            <Item item={item} key={`bestSellers-${item._id}`} />
-                        ))}
-                    {value === 'topRated' &&
-                        topRatedItems.map((item) => (
-                            <Item item={item} key={`topRated-${item._id}`} />
-                        ))}
+                    {/* Question Detail */}
+                    <Box display="flex" flexDirection="column" alignItems="center">
+                        <QuestionDetail questionProp={items[indexQuestion]} />
+                        <Box display="flex" justifyContent="space-between" width="100%" mt={2}>
+                            <Button variant="contained" onClick={handlePreviousQuestion}>
+                                Previous
+                            </Button>
+                            <Button variant="contained" onClick={handleNextQuestion}>
+                                Next
+                            </Button>
+                        </Box>
+                    </Box>
+
+                    {/* Action Buttons */}
+                    <Box display="flex" flexDirection="column" alignItems="center">
+                        <IconButton color="primary">
+                            <Favorite />
+                        </IconButton>
+                        <IconButton color="primary">
+                            <Bookmark />
+                        </IconButton>
+                        <IconButton color="primary">
+                            <Share />
+                        </IconButton>
+                    </Box>
                 </Box>
             )}
+
             {loading && (
                 <Typography color={shades.primary[300]}>Loading...</Typography>
             )}

@@ -3,7 +3,7 @@ import classroomApi from "api/classroomApi";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { removeManyFromCart, setItems } from "state";
-import TableClassroom from "./TableQuestions";
+import TableClassroom from "./TableClassrooms";
 
 const btn = {
   title: "Thêm câu hỏi mới",
