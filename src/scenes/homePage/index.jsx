@@ -6,10 +6,7 @@ import Subscribe from "./Subscribe";
 const HomePage = () => {
   return (
     <Box>
-      {/* <MainCarousel /> */}
-      {/* <Box mb={"80px"} /> */}
       <QuestionList />
-      {/* <Subscribe /> */}
     </Box>
   );
 };

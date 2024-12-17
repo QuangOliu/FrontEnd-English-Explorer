@@ -14,7 +14,6 @@ const QuestionDetail = ({
     const [explanation, setExplanation] = useState('')
     const [image, setImage] = useState('')
     const [audio, setAudio] = useState('')
-    const [audioUrl, setAudioUrl] = useState('') // State to hold audio URL
 
     // UseEffect to set the state when questionProp changes
     useEffect(() => {
@@ -45,7 +44,7 @@ const QuestionDetail = ({
                             style={{ width: '100%' }}
                         />
                     )}
-                    {audioUrl && (
+                    {audio && (
                         <audio controls>
                             <source
                                 src={`http://localhost:8080/api/v1/files/${audio}`} // Use the fetched audio URL
@@ -55,7 +54,7 @@ const QuestionDetail = ({
                         </audio>
                     )}
                 </Grid>
-                <Grid item xs={image || audioUrl ? 6 : 12}>
+                <Grid item xs={image || audio ? 6 : 12}>
                     <Grid xs={12} padding={'0 20px'}>
                         <Typography variant="h2">{question}</Typography>
                         <Grid item xs={12}>

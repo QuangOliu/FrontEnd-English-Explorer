@@ -28,24 +28,10 @@ export const isAuthenticated = () => {
 }
 
 // Utility function to check if the user is authenticated
-export function isAdmin(user) {
-    if (!user) return false
-
-    // Kiểm tra trong danh sách roles
-    if (user.roles && user.roles.some((role) => role.authority === 'ADMIN')) {
-        return true
-    }
-
-    // Kiểm tra trong danh sách authorities
-    if (
-        user.authorities &&
-        user.authorities.some((auth) => auth.authority === 'ADMIN')
-    ) {
-        return true
-    }
-
-    return false
-}
+export const isAdmin = (user) => {
+    if (!user || !user.roles) return false; // Kiểm tra user hợp lệ
+    return user.roles.some((role) => role.name === "ADMIN");
+};
 
 // Utility function to check if the user is authenticated
 export function isAuth(user) {
@@ -56,4 +42,10 @@ export function isAuth(user) {
         return true
     }
     return false
+}
+
+export function isCorrect(selectedChoiceId, choices) {
+    if (!selectedChoiceId) return false; // If no choice is selected, return false
+    const correctChoice = choices.find(choice => choice.isCorrect); // Assuming choices have an `isCorrect` field
+    return correctChoice && correctChoice.id === selectedChoiceId; // Compare with selected choice
 }

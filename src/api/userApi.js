@@ -15,8 +15,13 @@ const userApi = {
   },
 
   deleteUsers(data) {
-    const url = "/user/deletemany";
-    return axiosClient.delete(url, { data });
+    const url = "/users/deletemany";
+    return axiosClient.delete(url, data);
+  },
+  
+  deleteUser(id) {
+    const url = "/users/"+id;
+    return axiosClient.delete(url);
   },
   updateAccount(userId, data) {
     const url = `/user/${userId}/update`;

@@ -37,7 +37,7 @@ const Navbar = () => {
     const [isMobileMenuToggled, setIsMobileMenuToggled] = useState(false)
     const dispatch = useDispatch()
     const navigate = useNavigate()
-    const user = useSelector((state) => state.user)
+
     const cart = useSelector((state) => state.cart)
     const isNonMobileScreens = useMediaQuery('(min-width: 1000px)')
 
@@ -47,6 +47,8 @@ const Navbar = () => {
     const background = theme.palette.background.default
     const primaryLight = theme.palette.primary.light
     const alt = theme.palette.background.alt
+
+    const user = useSelector((state) => state.user);
 
     const fullName = `${user?.fullname}`
     // const fullName = 'user';
@@ -144,7 +146,7 @@ const Navbar = () => {
                                     <Tooltip title={'Classroom'}>
                                         <IconButton
                                             onClick={() =>
-                                                navigate('/manage/classrooms')
+                                                navigate('/classrooms')
                                             }
                                         >
                                             <CardMembershipIcon />
@@ -276,9 +278,10 @@ const Navbar = () => {
                                             <Typography>{fullName}</Typography>
                                         </MenuItem>
                                         <MenuItem
-                                            onClick={() =>
+                                            onClick={() => {
                                                 dispatch(setLogout())
-                                            }
+                                                navigate('/login')
+                                            }}
                                         >
                                             Log Out
                                         </MenuItem>

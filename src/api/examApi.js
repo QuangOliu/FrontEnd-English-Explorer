@@ -22,6 +22,14 @@ const examApi = {
         const url = `exams/${id}`
         return axiosClient.get(url)
     },
+    submitAnser(examId, answers) {
+        const url = `exams/do-exam/${examId}`
+        return axiosClient.post(url, answers)
+    },
+    deleteExam(id) {
+        const url = `exams/${id}`
+        return axiosClient.delete(url)
+    },
 }
 
 export default examApi

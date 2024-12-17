@@ -25,12 +25,17 @@ import {
 } from '@mui/material'
 import toast, { Toaster } from 'react-hot-toast'
 import { useTheme } from '@emotion/react'
+import { isAdmin } from 'utils/utils'
+import { useSelector } from 'react-redux'
+import authApi from 'api/authApi'
 
 function ExamList({ classroomId }) {
     const [exams, setExams] = useState([])
+    const [exam, setExam] = useState({})
     const [open, setOpen] = useState(false)
     const navigate = useNavigate()
     const theme = useTheme()
+    const user = useSelector((state) => state.user)
 
     const [formData, setFormData] = useState({
         title: '',
@@ -93,9 +98,38 @@ function ExamList({ classroomId }) {
             })
     }
 
+    const showPopupDelete = (exam) => {
+        setExam(exam)
+        handleClickOpenDelete()
+    }
+
     // Function to navigate to exam detail page
     const handleEditClick = (examId) => {
-        navigate(`/exam/detail/${examId}`)
+        console.log(examId)
+        if (isAdmin(user)) {
+            navigate(`/exam/user/${examId}`)
+        } else {
+            navigate(`/exam/detail/${examId}`)
+        }
+    }
+
+    const [openDelete, setOpenDelete] = React.useState(false)
+
+    const handleClickOpenDelete = (id) => {
+        setOpenDelete(true)
+    }
+
+    const handleCloseDelete = () => {
+        setOpenDelete(false)
+    }
+    const handleDeleteExam = () => {
+        examApi
+            .deleteExam(exam.id)
+            .then((result) => {
+            })
+            .catch((err) => {
+                console.error(err)
+            })
     }
 
     return (
@@ -110,55 +144,105 @@ function ExamList({ classroomId }) {
                             <TableCell>Questions</TableCell>
                             <TableCell>Start Date</TableCell>
                             <TableCell>End Date</TableCell>
+                            {isAdmin(user) && <TableCell>Actions</TableCell>}
                         </TableRow>
                     </TableHead>
                     <TableBody>
                         {exams.map((exam) => (
-                            <TableRow 
+                            <TableRow
                                 key={exam.id}
                                 onClick={() => handleEditClick(exam.id)}
                                 sx={{
                                     '&:hover': {
-                                        backgroundColor: theme.palette.action.hover,
+                                        backgroundColor:
+                                            theme.palette.action.hover,
                                         cursor: 'pointer',
-                                    }
+                                    },
                                 }}
                             >
                                 <TableCell>
-                                    <Typography variant="body1" sx={{ fontWeight: 'bold' }}>
+                                    <Typography
+                                        variant="body1"
+                                        sx={{ fontWeight: 'bold' }}
+                                    >
                                         {exam.title}
                                     </Typography>
                                 </TableCell>
                                 <TableCell>
-                                    <Typography variant="body2" sx={{ color: 'gray' }}>
+                                    <Typography
+                                        variant="body2"
+                                        sx={{ color: 'gray' }}
+                                    >
                                         {exam.questions?.length} Questions
                                     </Typography>
                                 </TableCell>
                                 <TableCell>
                                     {exam.startDate ? (
-                                        <span style={{ fontWeight: 'bold', color: 'green' }}>
-                                            {new Date(exam.startDate).toLocaleDateString()}
+                                        <span
+                                            style={{
+                                                fontWeight: 'bold',
+                                                color: 'green',
+                                            }}
+                                        >
+                                            {new Date(
+                                                exam.startDate
+                                            ).toLocaleDateString()}
                                         </span>
                                     ) : (
-                                        <span style={{ color: 'gray' }}>Start Date Not Set</span>
+                                        <span style={{ color: 'gray' }}>
+                                            Start Date Not Set
+                                        </span>
                                     )}
                                 </TableCell>
                                 <TableCell>
                                     {exam.endDate ? (
-                                        <span style={{ fontWeight: 'bold', color: 'red' }}>
-                                            {new Date(exam.endDate).toLocaleDateString()}
+                                        <span
+                                            style={{
+                                                fontWeight: 'bold',
+                                                color: 'red',
+                                            }}
+                                        >
+                                            {new Date(
+                                                exam.endDate
+                                            ).toLocaleDateString()}
                                         </span>
                                     ) : (
-                                        <span style={{ color: 'gray' }}>End Date Not Set</span>
+                                        <span style={{ color: 'gray' }}>
+                                            End Date Not Set
+                                        </span>
                                     )}
                                 </TableCell>
+                                {isAdmin(user) && (
+                                    <TableCell
+                                        onClick={(e) => {
+                                            e.stopPropagation() // Prevent row click
+                                            navigate(`/exam/edit/${exam.id}`)
+                                        }}
+                                    >
+                                        <Button>Edit</Button>
+                                    </TableCell>
+                                )}
+                                {/* {isAdmin(user) && (
+                                    <TableCell
+                                        onClick={(e) => {
+                                            e.stopPropagation() // Prevent row click
+                                            showPopupDelete(exam)
+                                        }}
+                                    >
+                                        <Button>Delete</Button>
+                                    </TableCell>
+                                )} */}
                             </TableRow>
                         ))}
                     </TableBody>
                 </Table>
             </TableContainer>
 
-            <Button variant="outlined" onClick={handleClickOpen} style={{ marginTop: '20px' }}>
+            <Button
+                variant="outlined"
+                onClick={handleClickOpen}
+                style={{ marginTop: '20px' }}
+            >
                 Add Exam
             </Button>
             <Dialog
@@ -235,6 +319,28 @@ function ExamList({ classroomId }) {
                 <DialogActions>
                     <Button onClick={handleClose}>Cancel</Button>
                     <Button type="submit">Add Exam</Button>
+                </DialogActions>
+            </Dialog>
+
+            <Dialog
+                open={openDelete}
+                onClose={handleCloseDelete}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+            >
+                <DialogTitle id="alert-dialog-title">
+                    {'Confirm Delete?'}
+                </DialogTitle>
+                <DialogContent>
+                    <DialogContentText id="alert-dialog-description">
+                        Do you want to delete this exam
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleCloseDelete}>Cancel</Button>
+                    <Button onClick={handleDeleteExam()} autoFocus>
+                        Agree
+                    </Button>
                 </DialogActions>
             </Dialog>
             <Toaster />

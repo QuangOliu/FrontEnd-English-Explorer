@@ -64,8 +64,9 @@ export default function Form() {
             .login(values)
             .then((response) => {
                 // Xử lý response thành công
-                // debugger
+                // 
                 // dispatch(setLogin(response))
+                
                 setTokens(response.access_token, response.refresh_token)
                 navigate('/')
             })
@@ -86,7 +87,7 @@ export default function Form() {
             .register(values)
             .then((response) => {
                 // Xử lý response thành công
-                debugger
+                
                 setTokens(response.access_token, response.refresh_token)
                 navigate('/')
             })

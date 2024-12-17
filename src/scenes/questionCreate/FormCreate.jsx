@@ -75,7 +75,7 @@ const QuestionForm = ({ question, onChange }) => {
     }
 
     const handleRemoveChoice = (index) => {
-        debugger
+        
         const newChoises = formValues.choises.filter((_, i) => i !== index)
         setFormValues((prev) => ({ ...prev, choises: newChoises }))
     }
@@ -122,10 +122,10 @@ const QuestionForm = ({ question, onChange }) => {
         }
 
         if (formValues.choises.length === 0) {
-            debugger
+            
             newErrors.choises = 'At least one choice is required'
         } else {
-            debugger
+            
             let hasTrueAnswer = false
             formValues.choises.forEach((choice, index) => {
                 if (!choice.answer) {

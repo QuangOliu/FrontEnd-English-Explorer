@@ -26,7 +26,7 @@ export const authSlice = createSlice({
       state.isCartOpen = !state.isCartOpen;
     },
     setLogin: (state, action) => {
-      debugger;
+      ;
       state.access_token = action.payload.access_token;
       state.refresh_token = action.payload.refresh_token;
       setTokens(action.payload.access_token, action.payload.refresh_token);
@@ -35,6 +35,7 @@ export const authSlice = createSlice({
       state.access_token = null;
       state.refresh_token = null;
       state.user = null;
+      ;
       clearTokens();
     },
     setCheckOut: (state) => {

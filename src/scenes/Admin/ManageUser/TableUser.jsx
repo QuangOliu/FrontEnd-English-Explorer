@@ -26,10 +26,11 @@ import TableBody from '@mui/material/TableBody'
 import TableContainer from '@mui/material/TableContainer'
 import TableHead from '@mui/material/TableHead'
 import TableRow from '@mui/material/TableRow'
+import authApi from 'api/authApi'
 import userApi from 'api/userApi'
 import StyledTableCell from 'components/StyledTableCell'
 import StyledTableRow from 'components/StyledTableRow'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { Link, useNavigate } from 'react-router-dom'
 
@@ -85,7 +86,6 @@ function TableUsers({ data, btn, submitDelete }) {
     const [selectedRoles, setSelectedRoles] = useState({})
     const [selectedOne, setSelectedOne] = useState()
     const [actionAllIn, setActionAllIn] = useState(false)
-
     const user = useSelector((state) => state.user)
     const isAdmin = user?.role === 'admin'
 
@@ -162,6 +162,17 @@ function TableUsers({ data, btn, submitDelete }) {
                 console.log({ result })
             })
             .catch((err) => {})
+    }
+
+    const handleDelete = (id) => {
+        userApi
+            .deleteUser(id)
+            .then((result) => {
+                console.log({ result })
+            })
+            .catch((err) => {
+                console.log({ err })
+            })
     }
 
     return (
@@ -363,6 +374,29 @@ function TableUsers({ data, btn, submitDelete }) {
                                                     <EditIcon fontSize="inherit" />
                                                 </IconButton>
                                             </StyledTableCell>
+
+                                            {/* <StyledTableCell align="left">
+                                                <IconButton
+                                                    onClick={() => {
+                                                        handleDelete(row.id)
+                                                    }}
+                                                    size="large"
+                                                    sx={{
+                                                        m: '2rem 0',
+                                                        p: '1rem',
+                                                        backgroundColor:
+                                                            palette.primary
+                                                                .main,
+                                                        color: 'white',
+                                                        '&:hover': {
+                                                            color: palette
+                                                                .primary.main,
+                                                        },
+                                                    }}
+                                                >
+                                                    <DeleteIcon fontSize="inherit" />
+                                                </IconButton>
+                                            </StyledTableCell> */}
                                         </StyledTableRow>
                                     )
                                 })}

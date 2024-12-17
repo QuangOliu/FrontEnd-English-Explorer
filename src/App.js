@@ -1,51 +1,46 @@
 import { Box, CssBaseline, ThemeProvider } from '@mui/material'
 import { createTheme } from '@mui/material/styles'
-import axiosClient from 'api/axiosClient'
 import NotFound from 'components/NotFound'
 import { useEffect, useMemo } from 'react'
 import { useSelector } from 'react-redux'
 import {
     BrowserRouter,
     matchPath,
-    Navigate,
     Route,
     Routes,
-    useLocation,
+    useLocation
 } from 'react-router-dom'
 import ManageDashboad from 'scenes/Admin'
-import EditProduct from 'scenes/Admin/EditProduct'
-import ManageOrder from 'scenes/Admin/ManageOrder'
-import ManageProduct from 'scenes/Admin/ManageProduct'
-import OrderDetail from 'scenes/OrderDetail'
-import StatisticalProduct from 'scenes/Statistical/Product'
-import Checkout from 'scenes/checkoutPage/Checkout'
+import ManageQuestion from 'scenes/Admin/ManageQuestion'
+import ManageUser from 'scenes/Admin/ManageUser'
+import ClassroomPage from 'scenes/ClassroomPage/ClassroomPgae'
+import EditProfile from 'scenes/EditProfile'
 import CartMenu from 'scenes/global/CarMenu'
 import Navbar from 'scenes/global/Navbar'
 import HomePage from 'scenes/homePage'
 import LoginPage from 'scenes/loginPage'
-import ProductCreate from 'scenes/productCreate'
-import ProductDetail from 'scenes/productDetail'
-import ProfilePage from 'scenes/profilePage'
-import SearchPage from 'scenes/searchPage'
-import { themeSettings } from './theme'
-import ManageUser from 'scenes/Admin/ManageUser'
-import EditProfile from 'scenes/EditProfile'
 import RegisterForm from 'scenes/loginPage/RegisterForm'
-import ManageQuestion from 'scenes/Admin/ManageQuestion'
-import QuestionCreate from 'scenes/questionCreate'
-import ClassroomCreate from 'scenes/ManageClassroom/classroomCreate/FormCreate'
 import ManageClassroom from 'scenes/ManageClassroom'
 import ClassroomDetail from 'scenes/ManageClassroom/classroomCreate/ClassroomDetail'
+import ClassroomCreate from 'scenes/ManageClassroom/classroomCreate/FormCreate'
 import ExamForm from 'scenes/ManageClassroom/Exam/ExamForm'
-import ExamiDetail from 'scenes/ManageClassroom/Exam/ExamiDetail'
-import { isAdmin, isAuth } from 'utils/utils'
-import ClassroomPage from 'scenes/ClassroomPage/ClassroomPgae'
+import ExamiEdit from 'scenes/ManageClassroom/Exam/ExamiEdit'
+import ExamUser from 'scenes/ManageClassroom/Exam/ExamUser'
+import ProfilePage from 'scenes/profilePage'
+import QuestionCreate from 'scenes/questionCreate'
+import { AdminRoute, AuthRoute } from 'utils/authChecks'
+import { themeSettings } from './theme'
+import ExamInfo from 'scenes/ExamPage/ExamInfo'
+import ExamPage from 'scenes/ExamPage/ExamPage'
 
 function App() {
     const mode = useSelector((state) => state.mode)
     const theme = useMemo(() => createTheme(themeSettings(mode)), [mode])
-    const user = useSelector((state) => state.user)
+    // const [user, setUser] = useState({})
 
+    // useEffect(() => {
+    //     handleGetCurrentUser(setUser);
+    // }, [])
     const ScrollToTop = () => {
         const location = useLocation()
 
@@ -53,6 +48,7 @@ function App() {
         const hideNavbarRoutes = [
             '/classrooms/:questionId',
             '/question/:questionId',
+            '/exam/doing/:examId'
         ]
 
         // Check if the current path matches any route pattern in hideNavbarRoutes
@@ -69,116 +65,55 @@ function App() {
 
     return (
         <div className="app">
-            <BrowserRouter>
-                <ThemeProvider theme={theme}>
-                    <CssBaseline />
-                    <ScrollToTop />
-                    {/* {hideNavbar && <Navbar />} Conditionally render Navbar */}
-                    <Box>
-                        <Routes>
-                            <Route path="/" element={<HomePage />} />
-                            <Route path="/login" element={<LoginPage />} />
-                            <Route
-                                path="/classrooms"
-                                element={<ClassroomPage />}
-                            >
-                                <Route
-                                    path=":classroomId"
-                                    element={<ClassroomDetail />}
-                                />
-                            </Route>
-                            <Route
-                                path="/user/:userId"
-                                element={
-                                    isAuth(user) ? (
-                                        <ProfilePage />
-                                    ) : (
-                                        <Navigate to="/login" />
-                                    )
-                                }
-                            />
-                            <Route
-                                path="/user/:userId/edit"
-                                element={
-                                    isAuth(user) ? (
-                                        <EditProfile />
-                                    ) : (
-                                        <Navigate to="/login" />
-                                    )
-                                }
-                            />
-                            <Route path="/checkout" element={<Checkout />} />
-                            <Route path="/search" element={<SearchPage />} />
-                            <Route
-                                path="/products/:productId"
-                                element=<ProductDetail />
-                            />
+        <BrowserRouter>
+            <ThemeProvider theme={theme}>
+                <CssBaseline />
+                <ScrollToTop/>
+                <Box>
+                    <Routes>
+                        <Route path="/login" element={<LoginPage />} />
+                        
+                        <Route path="/" element={<AuthRoute element={<HomePage />} />} />
 
-                            <Route path="/questions">
-                                <Route
-                                    path="create"
-                                    element={<QuestionCreate />}
-                                />
-                                <Route
-                                    path="edit/:questionId"
-                                    element={<QuestionCreate />}
-                                />
-                                <Route index element=<ManageQuestion /> />
-                            </Route>
+                        {/* Classrooms */}
+                        <Route path="/classrooms" element={<AuthRoute element={<ClassroomPage />} />} />
+                        <Route path="/classrooms/:classroomId" element={<AuthRoute element={<ClassroomDetail />} />} />
 
-                            <Route path="/exam">
-                                <Route path=":examId" element={<ExamForm />} />
-                                <Route
-                                    path="detail/:examId"
-                                    element={<ExamiDetail />}
-                                />
-                            </Route>
+                        {/* User Profile and Edit */}
+                        <Route path="/user/:userId" element={<AuthRoute element={<ProfilePage />} />} />
+                        <Route path="/user/:userId/edit" element={<AuthRoute element={<EditProfile />} />} />
 
-                            <Route path="/orders">
-                                <Route
-                                    path=":orderId"
-                                    element={<OrderDetail />}
-                                />
-                            </Route>
-                            {isAdmin(user) && (
-                                <Route path="/manage">
-                                    <Route path="orders">
-                                        <Route index element=<ManageOrder /> />
-                                    </Route>
+                        {/* Questions */}
+                        <Route path="/questions" element={<AuthRoute element={<ManageQuestion />} />} />
+                        <Route path="/questions/create" element={<AuthRoute element={<QuestionCreate />} />} />
+                        <Route path="/questions/edit/:questionId" element={<AuthRoute element={<QuestionCreate />} />} />
 
-                                    <Route path="classrooms">
-                                        <Route
-                                            path="create"
-                                            element={<ClassroomCreate />}
-                                        />
-                                        <Route
-                                            path="edit/:classroomId"
-                                            element={<ClassroomCreate />}
-                                        />
-                                        <Route
-                                            index
-                                            element=<ManageClassroom />
-                                        />
-                                    </Route>
+                        {/* Exams */}
+                        <Route path="/exam" element={<AuthRoute element={<ExamForm />} />} />
+                        <Route path="/exam/edit/:examId" element={<AuthRoute element={<ExamiEdit />} />} />
+                        <Route path="/exam/detail/:examId" element={<AuthRoute element={<ExamInfo />} />} />
+                        <Route path="/exam/user/:examId" element={<AdminRoute element={<ExamUser />} />} />
+                        <Route path="/exam/doing/:examId" element={<AuthRoute element={<ExamPage />} />} />
+                        <Route path="/exam/:examId" element={<AuthRoute element={<ExamForm />} />} />
 
-                                    <Route path="users">
-                                        <Route
-                                            path="create"
-                                            element={<RegisterForm />}
-                                        />
-                                        <Route index element={<ManageUser />} />
-                                    </Route>
+                        {/* Admin Routes */}
+                        <Route path="/manage" element={<AdminRoute element={<ManageDashboad />} />} />
+                            
+                        <Route path="/manage/classrooms/create" element={<ClassroomCreate />} />
+                        <Route path="/manage/classrooms/edit/:classroomId" element={<ClassroomCreate />} />
+                        <Route path="/manage/classrooms" element={<ManageClassroom />} />
 
-                                    <Route index element={<ManageDashboad />} />
-                                </Route>
-                            )}
-                            <Route path="*" element={<NotFound />} />
-                        </Routes>
-                    </Box>
-                    <CartMenu />
-                </ThemeProvider>
-            </BrowserRouter>
-        </div>
+                        <Route path="/manage/users/create" element={<RegisterForm />}/>
+                        <Route  path="/manage/users" element={<ManageUser  />} />
+
+                        {/* Catch-All Route for 404 */}
+                        <Route path="*" element={<NotFound />} />
+                    </Routes>
+                </Box>
+                <CartMenu />
+            </ThemeProvider>
+        </BrowserRouter>
+    </div>
     )
 }
 

@@ -16,7 +16,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import TableQuestions from 'scenes/Admin/ManageQuestion/TableQuestions'
 import QuestionForm from './QuestionForm'
 
-const ExamiDetail = () => {
+const ExamiEdit = () => {
     const [formValues, setFormValues] = useState({
         title: '',
         description: '',
@@ -290,4 +290,4 @@ const ExamiDetail = () => {
     )
 }
 
-export default ExamiDetail
+export default ExamiEdit

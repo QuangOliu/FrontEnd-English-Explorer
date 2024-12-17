@@ -3,7 +3,7 @@ import { Box, Button, CircularProgress, Divider, MenuItem, Select, Step, StepLab
 import orderApi from "api/orderApi";
 import FlexBetween from "components/FlexBetween";
 import { Formik } from "formik";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import Aleart from "scenes/global/Aleart";
@@ -11,6 +11,7 @@ import { setCheckOut } from "state";
 import * as yup from "yup";
 import { shades } from "../../theme";
 import productApi from "api/productApi";
+import authApi from "api/authApi";
 
 const Checkout = () => {
   const dispatch = useDispatch();

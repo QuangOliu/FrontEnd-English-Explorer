@@ -28,11 +28,9 @@ function ManageUser() {
   }, []);
 
   const submitDelete = async (selected) => {
-    const formData = {
-      selected: selected,
-    };
+    
     userApi
-      .deleteUsers(formData)
+      .deleteUsers(selected)
       .then((result) => {
         const newData = data.filter((item) => {
           return !selected.includes(item._id);

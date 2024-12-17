@@ -7,6 +7,7 @@ import Button from '@mui/material/Button'
 import CardActionArea from '@mui/material/CardActionArea'
 import CardActions from '@mui/material/CardActions'
 import { useNavigate } from 'react-router-dom'
+import classmemnerApi from 'api/classmember'
 
 export default function ClassroomCard({ classroom }) {
     const { id, name, description } = classroom
@@ -18,11 +19,19 @@ export default function ClassroomCard({ classroom }) {
     }, [])
 
     const handleClick = () => {
-        navigate(`/classrooms/${id}`)
+        let data = {
+            classroom: {id},
+        }
+        classmemnerApi.create(data).then((result) => {
+            console.log(result);
+        }).catch((err) => {
+            console.log(err);
+        });
+        // navigate(`/classrooms/${id}`)
     }
     return (
         <Card sx={{ maxWidth: 345 }}>
-            <CardActionArea>
+            <CardActionArea onClick={()=> {navigate("/classrooms/" + id)}}>
                 <CardMedia
                     component="img"
                     height="140"

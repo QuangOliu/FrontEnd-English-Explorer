@@ -7,6 +7,7 @@ import TableListItem from "./TableListItem";
 import OppositeContentTimeline from "components/Timeline";
 import { useTheme } from "@emotion/react";
 import { useSelector } from "react-redux";
+import authApi from "api/authApi";
 
 const arrStatus = ["Order", "Approved", "Shipping", "Success"];
 
@@ -14,8 +15,15 @@ function OrderDetail() {
   const [data, setData] = useState({});
   const [items, setItems] = useState([]);
   const [open, setOpen] = useState(false);
+  const [user, setUser] = useState({})
 
-  const user = useSelector((state) => state.user);
+  useEffect(() => {
+      authApi.getCurrent().then((result) => {
+          setUser(result)
+      }).catch((err) => {
+          console.log(err);
+      });
+  }, [])
   const isAdmin = user?.role === "admin";
 
   const { orderId } = useParams();

@@ -18,10 +18,14 @@ const questionApi = {
         const url = `questions?type=${Type}`
         return axiosClient.get(url)
     },
-    getById(id){
+    getById(id) {
         const url = `questions/${id}`
         return axiosClient.get(url)
-    }
+    },
+    getByExam(id) {
+        const url = `questions/get-by-exam/${id}`
+        return axiosClient.get(url)
+    },
 }
 
 export default questionApi

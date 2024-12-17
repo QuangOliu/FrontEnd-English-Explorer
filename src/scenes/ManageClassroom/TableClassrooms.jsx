@@ -22,9 +22,10 @@ import TableBody from '@mui/material/TableBody'
 import TableContainer from '@mui/material/TableContainer'
 import TableHead from '@mui/material/TableHead'
 import TableRow from '@mui/material/TableRow'
+import authApi from 'api/authApi'
 import StyledTableCell from 'components/StyledTableCell'
 import StyledTableRow from 'components/StyledTableRow'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
@@ -55,7 +56,7 @@ function TableClassroom({ data, btn, submitDelete }) {
     const [selectedOne, setSelectedOne] = useState()
     const [actionAllIn, setActionAllIn] = useState(false)
 
-    const user = useSelector((state) => state.user)
+    const user = useSelector((state) => state.user);
     const isAdmin = user?.role === 'admin'
     // Bên ngoài hàm TableClassroom
 

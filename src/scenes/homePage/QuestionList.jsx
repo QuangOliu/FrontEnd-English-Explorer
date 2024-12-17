@@ -9,6 +9,7 @@ import { useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { useTheme } from '@emotion/react'
 import { isAdmin } from 'utils/utils'
+import authApi from 'api/authApi'
 
 const QuestionList = () => {
     const [items, setItems] = useState([])
@@ -23,7 +24,7 @@ const QuestionList = () => {
     })
 
     const navigate = useNavigate()
-    const user = useSelector((state) => state.user)
+    const user = useSelector((state) => state.user);
     const theme = useTheme()
     const alt = theme.palette.background.alt
     const dark = theme.palette.neutral.dark
