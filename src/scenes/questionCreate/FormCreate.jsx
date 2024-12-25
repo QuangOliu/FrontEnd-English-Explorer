@@ -35,7 +35,12 @@ const QuestionForm = ({ question, onChange }) => {
         level: '',
         image: '',
         audio: '',
-        choises: [],
+        choises: [
+            { answer: '', correct: true },
+            { answer: '', correct: false },
+            { answer: '', correct: false },
+            { answer: '', correct: false },
+        ], // Initialize with 3 choices
     })
     const [errors, setErrors] = useState({})
     const { palette } = useTheme()
@@ -52,12 +57,13 @@ const QuestionForm = ({ question, onChange }) => {
         if (type === 'checkbox') {
             if (checked) {
                 newChoises.forEach((choice, i) => {
-                    choice.correct = i === index // Chỉ giữ lại lựa chọn được chọn là đúng
+                    choice.correct = i === index // Only the selected choice should be marked as correct
                 })
             }
             newChoises[index][name] = checked
         } else {
-            newChoises[index][name] = value
+            // Ensure answer can be null or empty if not required
+            newChoises[index][name] = value || null // Allow null for answer field
         }
 
         setFormValues((prev) => ({ ...prev, choises: newChoises }))
@@ -75,7 +81,6 @@ const QuestionForm = ({ question, onChange }) => {
     }
 
     const handleRemoveChoice = (index) => {
-        
         const newChoises = formValues.choises.filter((_, i) => i !== index)
         setFormValues((prev) => ({ ...prev, choises: newChoises }))
     }
@@ -122,13 +127,15 @@ const QuestionForm = ({ question, onChange }) => {
         }
 
         if (formValues.choises.length === 0) {
-            
             newErrors.choises = 'At least one choice is required'
         } else {
-            
             let hasTrueAnswer = false
             formValues.choises.forEach((choice, index) => {
-                if (!choice.answer) {
+                // Allow null or empty answers for specific cases (e.g., when it's not a required field)
+                if (
+                    formValues.skill !== 'LISTENING' &&
+                    (choice.answer === null || choice.answer === '')
+                ) {
                     newErrors[`choice${index}`] = 'Answer is required'
                 }
                 if (choice.correct === true) {
@@ -140,7 +147,7 @@ const QuestionForm = ({ question, onChange }) => {
                 toast.error('The question has a true answer.')
             }
         }
-
+        console.log(newErrors)
         setErrors(newErrors)
         return Object.keys(newErrors).length === 0 // Trả về true nếu không có lỗi
     }
@@ -258,7 +265,7 @@ const QuestionForm = ({ question, onChange }) => {
                         ) : null}
                         {formValues.audio ? (
                             <Box>
-                                <audio controls style={{display: "block"}}>
+                                <audio controls style={{ display: 'block' }}>
                                     <source
                                         src={`http://localhost:8080/api/v1/files/${formValues.audio}`}
                                         type="audio/mpeg"

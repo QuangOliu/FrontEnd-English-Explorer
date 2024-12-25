@@ -21,6 +21,10 @@ const classroomApi = {
     getById(id){
         const url = `classrooms/${id}`
         return axiosClient.get(url)
+    },
+    deleteById(id) {
+        const url = `classrooms/${id}`
+        return axiosClient.delete(url)
     }
 }
 

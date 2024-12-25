@@ -21,8 +21,6 @@ import classroomApi from 'api/classroomApi'
 const accessTypes = ['PUBLIC', 'PRIVATE', 'PROTECTED']
 
 const ClassroomCreate = () => {
-    const [imageUrl, setImageUrl] = useState('')
-    const [audioUrl, setAudioUrl] = useState('')
     const [pageType, setPageType] = useState('add')
     const [formValues, setFormValues] = useState({
         id: '',
@@ -79,13 +77,13 @@ const ClassroomCreate = () => {
                         user: result.user,
                         accessType: result.accessType,
                         name: result.name,
-                        courses: result.courses.map((choise, index) => ({
+                        courses: result?.courses?.map((choise, index) => ({
                             ...choise,
                         })),
-                        exams: result.exams.map((choise, index) => ({
+                        exams: result?.exams?.map((choise, index) => ({
                             ...choise,
                         })),
-                        classMembers: result.classMembers.map(
+                        classMembers: result?.classMembers?.map(
                             (choise, index) => ({
                                 ...choise,
                             })

@@ -1,162 +1,108 @@
 import { useTheme } from '@emotion/react'
 import EditIcon from '@mui/icons-material/Edit'
-import { Box, Checkbox, IconButton, Pagination } from '@mui/material'
-import Table from '@mui/material/Table'
-import TableBody from '@mui/material/TableBody'
-import TableContainer from '@mui/material/TableContainer'
-import TableHead from '@mui/material/TableHead'
-import TableRow from '@mui/material/TableRow'
+import { Box, Button, IconButton, Pagination } from '@mui/material'
+import { DataGrid } from '@mui/x-data-grid'
 import questionApi from 'api/questionApi'
-import StyledTableCell from 'components/StyledTableCell'
-import StyledTableRow from 'components/StyledTableRow'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
-const head = [
-    { numeric: true, disablePadding: false, label: 'ID', id: 'id' },
-    { numeric: true, disablePadding: false, label: 'Question', id: 'question' },
-    { numeric: true, disablePadding: false, label: 'Skill', id: 'skill' },
-    { numeric: true, disablePadding: false, label: 'Level', id: 'level' },
-]
-
-function TableQuestions({ btn, submitDelete }) {
+function TableQuestions() {
     const [data, setData] = useState([])
     const [selected, setSelected] = useState([])
-    const [open, setOpen] = useState(false)
     const [currentPage, setCurrentPage] = useState(1)
     const [totalPages, setTotalPages] = useState(1)
     const [pageSize] = useState(10)
 
-    const navigate = useNavigate()
     const theme = useTheme()
-    const { palette } = useTheme()
 
-    // Fetch data when component mounts or currentPage changes
+  const { palette } = useTheme();
+  const neutralLight = theme.palette.neutral.light;
+    const navigate = useNavigate()
+    const columns = [
+        { field: 'id', headerName: 'ID', minWidth: 50, maxWidth: 100 },
+        { field: 'question', headerName: 'Question', flex: 2, minWidth: 200 },
+        { field: 'skill', headerName: 'Skill', flex: 1, minWidth: 150 },
+        { field: 'level', headerName: 'Level', flex: 1, minWidth: 150 },
+        {
+            field: 'actions',
+            headerName: 'Actions',
+            flex: 0.8,
+            sortable: false,
+            minWidth: 100,
+            renderCell: (params) => {
+                return (
+                    <IconButton
+                        onClick={() => navigate(`/questions/edit/${params.row.id}`)}
+                        sx={{
+                            backgroundColor: theme.palette.primary.main,
+                            color: 'white',
+                            '&:hover': { color: theme.palette.primary.main },
+                        }}
+                    >
+                        <EditIcon fontSize="small" />
+                    </IconButton>
+                )
+            },
+        },
+    ]
+    
+
     useEffect(() => {
         questionApi
             .getQuestionsPage(currentPage, pageSize)
             .then((result) => {
                 setData(result.content)
-                setTotalPages(result.totalPages) // Set total pages from response
+                setTotalPages(result.totalPages)
             })
             .catch((err) => {
-                console.log(err)
+                console.error('Error fetching questions:', err)
             })
     }, [currentPage, pageSize])
 
-    const handleSelectAllClick = (event) => {
-        if (event.target.checked) {
-            const newSelected = data.map((n) => n.id)
-            setSelected(newSelected)
-        } else {
-            setSelected([])
-        }
+    const handlePageChange = (newPage) => {
+        setCurrentPage(newPage + 1) // DataGrid uses 0-based index
     }
 
-    const handleClick = (event, id) => {
-        const selectedIndex = selected.indexOf(id)
-        let newSelected = []
-
-        if (selectedIndex === -1) {
-            newSelected = newSelected.concat(selected, id)
-        } else if (selectedIndex === 0) {
-            newSelected = newSelected.concat(selected.slice(1))
-        } else if (selectedIndex === selected.length - 1) {
-            newSelected = newSelected.concat(selected.slice(0, -1))
-        } else if (selectedIndex > 0) {
-            newSelected = newSelected.concat(
-                selected.slice(0, selectedIndex),
-                selected.slice(selectedIndex + 1)
-            )
-        }
-
-        setSelected(newSelected)
-    }
-
-    const handlePageChange = (event, value) => {
-        setCurrentPage(value)
+    const handleSelectionModelChange = (newSelection) => {
+        console.log(newSelection)
+        setSelected(newSelection)
     }
 
     return (
         <Box>
-            <TableContainer>
-                <Table sx={{ minWidth: 700 }} aria-label="customized table">
-                    <TableHead>
-                        <TableRow>
-                            <StyledTableCell align="left">
-                                <Checkbox
-                                    color="primary"
-                                    checked={
-                                        selected.length > 0 &&
-                                        selected.length === data.length
-                                    }
-                                    onChange={handleSelectAllClick}
-                                />
-                            </StyledTableCell>
-                            {head.map((item) => (
-                                <StyledTableCell key={item.id} align="left">
-                                    {item.label}
-                                </StyledTableCell>
-                            ))}
-                            <StyledTableCell align="center" colSpan={2}>
-                                Action
-                            </StyledTableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {data.map((row) => (
-                            <StyledTableRow key={row.id}>
-                                <StyledTableCell align="left">
-                                    <Checkbox
-                                        color="primary"
-                                        checked={selected.includes(row.id)}
-                                        onChange={(event) =>
-                                            handleClick(event, row.id)
-                                        }
-                                    />
-                                </StyledTableCell>
-                                {head.map((column) => (
-                                    <StyledTableCell key={column.id}>
-                                        {row[column.id]}
-                                    </StyledTableCell>
-                                ))}
-                                <StyledTableCell align="left">
-                                    <IconButton
-                                        onClick={() => {
-                                            navigate(
-                                                `/questions/edit/${row.id}`
-                                            )
-                                        }}
-                                        size="large"
-                                        sx={{
-                                            m: '2rem 0',
-                                            p: '1rem',
-                                            backgroundColor:
-                                                palette.primary.main,
-                                            color: 'white',
-                                            '&:hover': {
-                                                color: palette.primary.main,
-                                            },
-                                        }}
-                                    >
-                                        <EditIcon fontSize="inherit" />
-                                    </IconButton>
-                                </StyledTableCell>
-                            </StyledTableRow>
-                        ))}
-                    </TableBody>
-                </Table>
-
-                {/* Pagination Component */}
-                <Pagination
-                    count={totalPages}
-                    page={currentPage}
-                    onChange={handlePageChange}
-                    color="primary"
-                    variant="outlined"
-                    sx={{ m: 2 }}
-                />
-            </TableContainer>
+            <DataGrid
+                rows={data}
+                columns={columns}
+                rowCount={totalPages * pageSize}
+                pageSize={pageSize}
+                paginationMode="server"
+                onPageChange={handlePageChange}
+                onSelectionModelChange={(newSelection) =>
+                    handleSelectionModelChange(newSelection)
+                }
+                sx={{ border: 0, height: 400 }}
+            />
+            <Pagination
+                count={totalPages}
+                page={currentPage}
+                onChange={(e, page) => setCurrentPage(page)}
+                color="primary"
+                sx={{ marginTop: 2, justifyContent: 'center', display: 'flex' }}
+            />
+            <Box width={'100%'} display={'flex'} justifyContent={'end'}>
+                    <Button
+                        sx={{
+                            backgroundColor: palette.primary.main,
+                            color: palette.background.alt,
+                            '&:hover': { color: palette.primary.main },
+                        }}
+                        onClick={() => {
+                            navigate('/questions/create')
+                        }}
+                    >
+                        Add New Question
+                    </Button>
+                </Box>
         </Box>
     )
 }

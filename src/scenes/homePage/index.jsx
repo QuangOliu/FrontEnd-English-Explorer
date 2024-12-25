@@ -1,14 +1,7 @@
-import { Box } from "@mui/material";
-import MainCarousel from "./MainCarousel";
-import QuestionList from "./QuestionList";
-import Subscribe from "./Subscribe";
+import QuestionList from './QuestionList'
 
 const HomePage = () => {
-  return (
-    <Box>
-      <QuestionList />
-    </Box>
-  );
-};
+    return <QuestionList />
+}
 
-export default HomePage;
+export default HomePage

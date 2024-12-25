@@ -142,7 +142,7 @@ function MemberList({ classroomId }) {
 
     return (
         <div>
-            <h2>Members for Classroom-{classroomId}</h2>
+            <h2 style={{margin:0}}>Members for Classroom-{classroomId}</h2>
 
             <TableContainer>
                 <Table sx={{ minWidth: 700 }} aria-label="customized table">

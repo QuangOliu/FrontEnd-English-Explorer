@@ -26,6 +26,14 @@ const questionApi = {
         const url = `questions/get-by-exam/${id}`
         return axiosClient.get(url)
     },
+    getByAction(action) {
+        const url = `questions/get-by-action?action=${action}`
+        return axiosClient.get(url);
+    },
+    getMineQuestions() {
+        const url = `questions/get-mine`
+        return axiosClient.get(url);
+    },
 }
 
 export default questionApi

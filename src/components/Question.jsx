@@ -1,13 +1,9 @@
-import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
-import { Box, Button, IconButton, Typography, useTheme } from "@mui/material";
+import { Box, IconButton, Typography, useTheme } from "@mui/material";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import Aleart from "scenes/global/Aleart";
-import { addToCart } from "../state";
 import { shades } from "../theme";
-import ModalGlobal from "./ModalGlobal";
 import "./styles.css";
 
 const Item = ({ item, width }) => {

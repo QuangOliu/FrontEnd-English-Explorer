@@ -359,8 +359,6 @@ function TableUsers({ data, btn, submitDelete }) {
                                                     }}
                                                     size="large"
                                                     sx={{
-                                                        m: '2rem 0',
-                                                        p: '1rem',
                                                         backgroundColor:
                                                             palette.primary
                                                                 .main,
@@ -375,28 +373,6 @@ function TableUsers({ data, btn, submitDelete }) {
                                                 </IconButton>
                                             </StyledTableCell>
 
-                                            {/* <StyledTableCell align="left">
-                                                <IconButton
-                                                    onClick={() => {
-                                                        handleDelete(row.id)
-                                                    }}
-                                                    size="large"
-                                                    sx={{
-                                                        m: '2rem 0',
-                                                        p: '1rem',
-                                                        backgroundColor:
-                                                            palette.primary
-                                                                .main,
-                                                        color: 'white',
-                                                        '&:hover': {
-                                                            color: palette
-                                                                .primary.main,
-                                                        },
-                                                    }}
-                                                >
-                                                    <DeleteIcon fontSize="inherit" />
-                                                </IconButton>
-                                            </StyledTableCell> */}
                                         </StyledTableRow>
                                     )
                                 })}
@@ -429,8 +405,6 @@ function TableUsers({ data, btn, submitDelete }) {
                     <Box width={'100%'} display={'flex'} justifyContent={'end'}>
                         <Button
                             sx={{
-                                m: '2rem 0',
-                                p: '1rem',
                                 backgroundColor: palette.primary.main,
                                 color: palette.background.alt,
                                 '&:hover': { color: palette.primary.main },

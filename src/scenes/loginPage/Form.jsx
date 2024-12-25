@@ -216,13 +216,11 @@ export default function Form() {
                         </Box>
 
                         {/* BUTTONS */}
-                        <Box>
+                        <Box sx={{ mt: 2 }}>
                             <Button
                                 fullWidth
                                 type="submit"
                                 sx={{
-                                    m: '2rem 0',
-                                    p: '1rem',
                                     backgroundColor: palette.primary.main,
                                     color: palette.background.alt,
                                     '&:hover': { color: palette.primary.main },

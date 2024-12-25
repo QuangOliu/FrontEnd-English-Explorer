@@ -5,6 +5,7 @@ import QuestionNavigator from './QuestionNavigator'
 import Timer from './Timer'
 import examApi from 'api/examApi'
 import Confetti from 'components/Confetti/Confetti'
+// import QuestionDetail from 'components/QuestionDetail'
 
 const {
     Dialog,
@@ -119,7 +120,7 @@ const ExamPage = () => {
     }
 
     return (
-        <Grid container spacing={2} padding={'20px'}>
+        <Grid container spacing={2} height={'100%'}>
             <Grid item xs={4}>
                 {/* Timer component */}
                 <Button
@@ -145,7 +146,7 @@ const ExamPage = () => {
                     justifyContent: 'space-between',
                     flexDirection: 'column',
                 }}
-                height={'calc(100vh - 40px)'}
+               height={'100%'}
             >
                 {questions[currentQuestion] ? (
                     <QuestionDetail
@@ -160,7 +161,6 @@ const ExamPage = () => {
                 <Grid
                     container
                     justifyContent="space-between"
-                    style={{ marginBottom: '20px' }}
                 >
                     <Grid xs={4}>
                         <Button

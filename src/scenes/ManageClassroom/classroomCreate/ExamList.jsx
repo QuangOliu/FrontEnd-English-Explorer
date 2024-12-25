@@ -1,6 +1,4 @@
-import React, { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import examApi from 'api/examApi'
+import { useTheme } from '@emotion/react'
 import {
     Button,
     Dialog,
@@ -8,26 +6,26 @@ import {
     DialogContent,
     DialogContentText,
     DialogTitle,
-    TextField,
-    Select,
-    MenuItem,
-    InputLabel,
     FormControl,
-    Box,
-    Typography,
+    InputLabel,
+    MenuItem,
+    Paper,
+    Select,
     Table,
     TableBody,
     TableCell,
     TableContainer,
     TableHead,
     TableRow,
-    Paper,
+    TextField,
+    Typography
 } from '@mui/material'
+import examApi from 'api/examApi'
+import React, { useEffect, useState } from 'react'
 import toast, { Toaster } from 'react-hot-toast'
-import { useTheme } from '@emotion/react'
-import { isAdmin } from 'utils/utils'
 import { useSelector } from 'react-redux'
-import authApi from 'api/authApi'
+import { useNavigate } from 'react-router-dom'
+import { isAdmin } from 'utils/utils'
 
 function ExamList({ classroomId }) {
     const [exams, setExams] = useState([])
@@ -125,8 +123,7 @@ function ExamList({ classroomId }) {
     const handleDeleteExam = () => {
         examApi
             .deleteExam(exam.id)
-            .then((result) => {
-            })
+            .then((result) => {})
             .catch((err) => {
                 console.error(err)
             })
@@ -134,7 +131,7 @@ function ExamList({ classroomId }) {
 
     return (
         <div>
-            <h2>Exams for Classroom-{classroomId}</h2>
+            <h2 style={{ margin: 0 }}>Exams for Classroom-{classroomId}</h2>
 
             <TableContainer component={Paper}>
                 <Table>
@@ -148,81 +145,84 @@ function ExamList({ classroomId }) {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {exams.map((exam) => (
-                            <TableRow
-                                key={exam.id}
-                                onClick={() => handleEditClick(exam.id)}
-                                sx={{
-                                    '&:hover': {
-                                        backgroundColor:
-                                            theme.palette.action.hover,
-                                        cursor: 'pointer',
-                                    },
-                                }}
-                            >
-                                <TableCell>
-                                    <Typography
-                                        variant="body1"
-                                        sx={{ fontWeight: 'bold' }}
-                                    >
-                                        {exam.title}
-                                    </Typography>
-                                </TableCell>
-                                <TableCell>
-                                    <Typography
-                                        variant="body2"
-                                        sx={{ color: 'gray' }}
-                                    >
-                                        {exam.questions?.length} Questions
-                                    </Typography>
-                                </TableCell>
-                                <TableCell>
-                                    {exam.startDate ? (
-                                        <span
-                                            style={{
-                                                fontWeight: 'bold',
-                                                color: 'green',
-                                            }}
+                        {exams?.length > 0 ? (
+                            exams?.map((exam) => (
+                                <TableRow
+                                    key={exam.id}
+                                    onClick={() => handleEditClick(exam.id)}
+                                    sx={{
+                                        '&:hover': {
+                                            backgroundColor:
+                                                theme.palette.action.hover,
+                                            cursor: 'pointer',
+                                        },
+                                    }}
+                                >
+                                    <TableCell>
+                                        <Typography
+                                            variant="body1"
+                                            sx={{ fontWeight: 'bold' }}
                                         >
-                                            {new Date(
-                                                exam.startDate
-                                            ).toLocaleDateString()}
-                                        </span>
-                                    ) : (
-                                        <span style={{ color: 'gray' }}>
-                                            Start Date Not Set
-                                        </span>
-                                    )}
-                                </TableCell>
-                                <TableCell>
-                                    {exam.endDate ? (
-                                        <span
-                                            style={{
-                                                fontWeight: 'bold',
-                                                color: 'red',
-                                            }}
-                                        >
-                                            {new Date(
-                                                exam.endDate
-                                            ).toLocaleDateString()}
-                                        </span>
-                                    ) : (
-                                        <span style={{ color: 'gray' }}>
-                                            End Date Not Set
-                                        </span>
-                                    )}
-                                </TableCell>
-                                {isAdmin(user) && (
-                                    <TableCell
-                                        onClick={(e) => {
-                                            e.stopPropagation() // Prevent row click
-                                            navigate(`/exam/edit/${exam.id}`)
-                                        }}
-                                    >
-                                        <Button>Edit</Button>
+                                            {exam.title}
+                                        </Typography>
                                     </TableCell>
-                                )}
-                                {/* {isAdmin(user) && (
+                                    <TableCell>
+                                        <Typography
+                                            variant="body2"
+                                            sx={{ color: 'gray' }}
+                                        >
+                                            {exam.questions?.length} Questions
+                                        </Typography>
+                                    </TableCell>
+                                    <TableCell>
+                                        {exam.startDate ? (
+                                            <span
+                                                style={{
+                                                    fontWeight: 'bold',
+                                                    color: 'green',
+                                                }}
+                                            >
+                                                {new Date(
+                                                    exam.startDate
+                                                ).toLocaleDateString()}
+                                            </span>
+                                        ) : (
+                                            <span style={{ color: 'gray' }}>
+                                                Start Date Not Set
+                                            </span>
+                                        )}
+                                    </TableCell>
+                                    <TableCell>
+                                        {exam.endDate ? (
+                                            <span
+                                                style={{
+                                                    fontWeight: 'bold',
+                                                    color: 'red',
+                                                }}
+                                            >
+                                                {new Date(
+                                                    exam.endDate
+                                                ).toLocaleDateString()}
+                                            </span>
+                                        ) : (
+                                            <span style={{ color: 'gray' }}>
+                                                End Date Not Set
+                                            </span>
+                                        )}
+                                    </TableCell>
+                                    {isAdmin(user) && (
+                                        <TableCell
+                                            onClick={(e) => {
+                                                e.stopPropagation() // Prevent row click
+                                                navigate(
+                                                    `/exam/edit/${exam.id}`
+                                                )
+                                            }}
+                                        >
+                                            <Button>Edit</Button>
+                                        </TableCell>
+                                    )}
+                                    {/* {isAdmin(user) && (
                                     <TableCell
                                         onClick={(e) => {
                                             e.stopPropagation() // Prevent row click
@@ -232,8 +232,11 @@ function ExamList({ classroomId }) {
                                         <Button>Delete</Button>
                                     </TableCell>
                                 )} */}
-                            </TableRow>
-                        ))}
+                                </TableRow>
+                            ))
+                        ) : (
+                            <>Chưa có bài kiểm tra nào</>
+                        )}
                     </TableBody>
                 </Table>
             </TableContainer>
@@ -338,7 +341,7 @@ function ExamList({ classroomId }) {
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleCloseDelete}>Cancel</Button>
-                    <Button onClick={handleDeleteExam()} autoFocus>
+                    <Button onClick={handleDeleteExam} autoFocus>
                         Agree
                     </Button>
                 </DialogActions>

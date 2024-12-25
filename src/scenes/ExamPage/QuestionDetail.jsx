@@ -40,25 +40,6 @@ const QuestionDetail = ({ questionProp, handleSelect, handleMark }) => {
                         <Grid container direction="column" spacing={1}>
                             {questionProp.choises.map((choice, index) => (
                                 <Grid item key={index}>
-                                    {/* Text option clickable */}
-                                    {/* <Box
-                                        onClick={() => handleSelect(questionProp, choice)}
-                                        sx={{
-                                            padding: '8px',
-                                            borderRadius: '5px',
-                                            cursor: 'pointer',
-                                            transition: 'background-color 0.3s',
-                                            backgroundColor:
-                                                questionProp?.answer?.id === choice.id
-                                                    ? '#ccc'
-                                                    : 'transparent',
-                                            '&:hover': {
-                                                backgroundColor: '#ddd',
-                                            },
-                                        }}
-                                    >
-                                        {choice.answer}
-                                    </Box> */}
 
                                     {/* Radio button option */}
                                     <FormControlLabel

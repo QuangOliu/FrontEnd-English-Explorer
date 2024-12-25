@@ -63,7 +63,10 @@ class ConfettiEffect {
         const elPosition = this.el.style.position
 
         if (elPosition !== 'relative' && elPosition !== 'absolute') {
-            this.el.style.position = 'relative'
+            this.el.style.position = 'fixed'
+            this.el.style.top = '0'
+            this.el.style.left = '0'
+            this.el.style.right = '0'
         }
 
         containerEl.classList.add('confetti-container')

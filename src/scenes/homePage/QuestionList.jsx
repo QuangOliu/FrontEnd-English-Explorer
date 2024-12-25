@@ -15,7 +15,6 @@ const QuestionList = () => {
     const [items, setItems] = useState([])
     const [indexQuestion, setIndexQuestion] = useState(0)
     const [loading, setLoading] = useState(true)
-    const [selectedChoice, setSelectedChoice] = useState(null)
     const [isCorrect, setIsCorrect] = useState(null)
     const [actionState, setActionState] = useState({
         love: false,
@@ -24,7 +23,7 @@ const QuestionList = () => {
     })
 
     const navigate = useNavigate()
-    const user = useSelector((state) => state.user);
+    const user = useSelector((state) => state.user)
     const theme = useTheme()
     const alt = theme.palette.background.alt
     const dark = theme.palette.neutral.dark
@@ -39,6 +38,7 @@ const QuestionList = () => {
             .catch((err) => console.log(err))
     }, [])
 
+
     const fetchActionState = (questionId) => {
         actionApi
             .getActionState(questionId)
@@ -49,18 +49,18 @@ const QuestionList = () => {
     }
 
     const handleNextQuestion = () => {
+        setIsAuto(true);
         const nextIndex = (indexQuestion + 1) % items.length
         setIndexQuestion(nextIndex)
-        setSelectedChoice(null)
         setIsCorrect(null)
         fetchActionState(items[nextIndex].id) // Fetch action state for the next question
     }
 
     const handlePreviousQuestion = () => {
+        setIsAuto(true);
         const prevIndex =
             indexQuestion === 0 ? items.length - 1 : indexQuestion - 1
         setIndexQuestion(prevIndex)
-        setSelectedChoice(null)
         setIsCorrect(null)
         fetchActionState(items[prevIndex].id) // Fetch action state for the previous question
     }
@@ -75,29 +75,26 @@ const QuestionList = () => {
             })
             .catch((err) => console.log(err))
     }
-
+    const [isAuto, setIsAuto] = useState(false)
     return (
         <Box
-            margin="0px auto"
-            height="100vh"
-            display="flex"
-            flexDirection="column"
+            style={{
+                height: '100%',
+                flexDirection: 'column',
+                justifyContent: 'space-between',
+                display: 'flex',
+            }}
         >
-            <Box
-                flex="1"
-                display="grid"
-                gridTemplateColumns="1fr auto"
-                gap="20px"
-            >
+            <Box flex="1" display="grid">
                 <Box display="flex" flexDirection="column" alignItems="center">
                     <QuestionDetail
                         questionProp={items[indexQuestion]}
-                        selectedChoice={selectedChoice}
+                        // selectedChoice={selectedChoice}
                         isCorrect={isCorrect}
-                        onChoiceSelect={(choice, correct) => {
-                            setSelectedChoice(choice)
-                            setIsCorrect(correct)
-                        }}
+                        // onChoiceSelect={(choice, correct) => {
+                        //     setSelectedChoice(choice)
+                        //     setIsCorrect(correct)
+                        // }}
                     />
                 </Box>
             </Box>
@@ -106,13 +103,8 @@ const QuestionList = () => {
                 display="flex"
                 justifyContent="space-between"
                 width="100%"
-                position="fixed"
-                bottom="0"
-                padding="10px"
-                bgcolor="white"
-                boxShadow="0 -2px 5px rgba(0, 0, 0, 0.1)"
-                zIndex="10"
                 backgroundColor={alt}
+                padding={'10px 20px'}
             >
                 <Box display="flex">
                     <IconButton
@@ -126,12 +118,6 @@ const QuestionList = () => {
                         onClick={() => handleToggleAction('BOOKMARK')}
                     >
                         <Bookmark />
-                    </IconButton>
-                    <IconButton
-                        color={actionState.share ? 'primary' : dark}
-                        onClick={() => handleToggleAction('SHARE')}
-                    >
-                        <Share />
                     </IconButton>
                 </Box>
 

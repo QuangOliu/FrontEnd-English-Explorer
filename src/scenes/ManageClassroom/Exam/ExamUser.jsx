@@ -6,7 +6,7 @@ import {
     ListItemAvatar,
     ListItemButton,
     ListItemText,
-    Typography
+    Typography,
 } from '@mui/material'
 import examApi from 'api/examApi'
 import userExamApi from 'api/userExamApi'
@@ -15,7 +15,6 @@ import toast, { Toaster } from 'react-hot-toast'
 import { useNavigate, useParams } from 'react-router-dom'
 
 const ExamUser = () => {
-    ;
     const [formValues, setFormValues] = useState({
         title: '',
         description: '',
@@ -56,16 +55,15 @@ const ExamUser = () => {
                 .catch((err) => {
                     console.error('Failed to fetch exam data:', err)
                     toast.error('Error loading exam details')
-                });
-            
-            userExamApi.getByExam(examId).then((result) => {
-                setUserExams(result)
-            }).catch((err) => {
-                
-            });
+                })
+
+            userExamApi
+                .getByExam(examId)
+                .then((result) => {
+                    setUserExams(result)
+                })
+                .catch((err) => {})
         }
-
-
     }, [examId])
     const navigate = useNavigate() // Initialize the useNavigate hook
 
@@ -145,41 +143,73 @@ const ExamUser = () => {
             <Button
                 variant="outlined"
                 onClick={() => navigate(-1)}
-                sx={{ mt: 2 }}
+                sx={{ mr: 2 }}
             >
                 Back
             </Button>
+            <Button
+                variant="contained"
+                color="primary"
+                onClick={() => navigate('/exam/doing/' + examId)}
+            >
+                Bắt đầu kiểm tra
+            </Button>
+            <span className='p-2'></span>
             <Typography variant="h2" gutterBottom>
-                {'Exam detail: ' + formValues.title +" ("+ formValues?.startDate +" to " +formValues?.endDate + ")"}
+                {'Exam detail: ' +
+                    formValues.title +
+                    ' (' +
+                    formValues?.startDate +
+                    ' to ' +
+                    formValues?.endDate +
+                    ')'}
             </Typography>
-            {userExams.map((value) => {
-                {/* const labelId = `checkbox-list-secondary-label-${value}` */}
-                return (
-                    <ListItem
-                        key={value}
-                        disablePadding
-                    >
-                        <ListItemButton>
-                            <ListItemAvatar>
-                                <Avatar
-                                    alt={`${value.user.fullname}`}
-                                    src={`/static/images/avatar/${
-                                        value + 1
-                                    }.jpg`}
-                                />
-                            </ListItemAvatar>
-                            <ListItemText
-                                id={value.id}
-                                primary={`${value.user.fullname}`}
-                            />
-                            <ListItemText
-                                id={value.id}
-                                primary={value.score ? `${value.score}` : "non submit"}
-                            />
-                        </ListItemButton>
-                    </ListItem>
-                )
-            })}
+            {userExams?.map((value) => {
+    return (
+        <ListItem key={value.id} disablePadding>
+            <ListItemButton sx={{ display: 'flex', alignItems: 'center' }}>
+                {/* Phần này 10 */}
+                <Box
+                    sx={{
+                        display: 'flex',
+                        flex: 10,
+                        alignItems: 'center',
+                        gap: 1,
+                    }}
+                >
+                    <ListItemAvatar>
+                        <Avatar
+                            alt={`${value.user.fullname}`}
+                            src={`/static/images/avatar/${value + 1}.jpg`}
+                        />
+                    </ListItemAvatar>
+                    <ListItemText
+                        id={value.id}
+                        primary={`${value.user.fullname}`}
+                    />
+                </Box>
+                {/* Phần này 2 */}
+                <Box
+                    sx={{
+                        flex: 2,
+                        textAlign: 'right',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'flex-end',
+                    }}
+                >
+                    <ListItemText
+                        id={value.id}
+                        primary={
+                            value.score ? `${value.score}` : 'non submit'
+                        }
+                    />
+                </Box>
+            </ListItemButton>
+        </ListItem>
+    );
+})}
+
 
             <Toaster />
         </Box>

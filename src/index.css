@@ -6,4 +6,28 @@ body,
   height: 100%;
   width: 100%;
   font-family: 'Roboto Slab', serif;
+  display: flex;
+  flex-direction: column;
+}
+
+.popup-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.popup-title {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.popup-container {
+}
+
+.action-popup-form {
+  padding: 8px 24px !important;
 }

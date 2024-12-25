@@ -19,8 +19,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import Bulletin from './Bulletin'
 import ExamList from './ExamList'
 import MemberList from '../Members/MemberList'
-
-const drawerWidth = 240
+import { Grid } from '@mui/material'
 
 const sidebarManu = [
     {
@@ -42,20 +41,9 @@ const sidebarManu = [
 
 function ResponsiveDrawer(props) {
     const { window } = props
-    const [mobileOpen, setMobileOpen] = useState(false)
     const [classroom, setclassroom] = useState({})
-    const [isClosing, setIsClosing] = useState(false)
     const [typeContent, setTypeContent] = useState(1)
     const { classroomId } = useParams()
-
-    const handleDrawerClose = () => {
-        setIsClosing(true)
-        setMobileOpen(false)
-    }
-
-    const handleDrawerTransitionEnd = () => {
-        setIsClosing(false)
-    }
 
     useEffect(() => {
         classroomApi
@@ -75,105 +63,52 @@ function ResponsiveDrawer(props) {
     const navigate = useNavigate()
     const theme = useTheme()
     const { palette } = useTheme()
-    const drawer = (
-        <div>
-            <Toolbar />
-            <ListItem disablePadding>
-                <ListItemButton onClick={() => navigate('/')}>
-                    <ListItemIcon>
-                        <HomeIcon />
-                    </ListItemIcon>
-                    <ListItemText primary={'Home'} />
-                </ListItemButton>
-            </ListItem>
-            <Divider />
-            <List>
-                {sidebarManu.map((item, index) => (
-                    <ListItem key={item.id} disablePadding>
-                        <ListItemButton
-                            onClick={() => handleClickSideBar(item.id)}
-                        >
-                            <ListItemIcon>{item.icon}</ListItemIcon>
-                            <ListItemText primary={item.text} />
-                        </ListItemButton>
-                    </ListItem>
-                ))}
-            </List>
-        </div>
-    )
-    // Remove this const when copying and pasting into your project.
     const container =
         window !== undefined ? () => window().document.body : undefined
 
     return (
-        <Box sx={{ display: 'flex' }}>
-            <CssBaseline />
-            <Box
-                component="nav"
-                sx={{
-                    width: { sm: drawerWidth },
-                    flexShrink: { sm: 0 },
-                    paddingTop: '100px',
-                }}
-                aria-label="mailbox folders"
-            >
-                {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
-                <Drawer
-                    container={container}
-                    variant="temporary"
-                    open={mobileOpen}
-                    onTransitionEnd={handleDrawerTransitionEnd}
-                    onClose={handleDrawerClose}
-                    ModalProps={{
-                        keepMounted: true, // Better open performance on mobile.
-                    }}
-                    sx={{
-                        display: { xs: 'block', sm: 'none' },
-                        '& .MuiDrawer-paper': {
-                            boxSizing: 'border-box',
-                            width: drawerWidth,
-                        },
-                    }}
-                >
-                    {drawer}
-                </Drawer>
-                <Drawer
-                    variant="permanent"
-                    sx={{
-                        display: { xs: 'none', sm: 'block' },
-                        '& .MuiDrawer-paper': {
-                            boxSizing: 'border-box',
-                            width: drawerWidth,
-                        },
-                    }}
-                    open
-                >
-                    {drawer}
-                </Drawer>
-            </Box>
+        <Grid container sx={{ display: 'flex' }} spacing={2}>
+            {/* Sidebar */}
+            <Grid item xs={12} sm={3} xl={3}>
+                <ListItem disablePadding>
+                    <ListItemButton onClick={() => navigate('/')}>
+                        <ListItemIcon>
+                            <HomeIcon />
+                        </ListItemIcon>
+                        <ListItemText primary={'Home'} />
+                    </ListItemButton>
+                </ListItem>
+                <Divider />
+                <List>
+                    {sidebarManu.map((item) => (
+                        <ListItem
+                            key={item.id}
+                            disablePadding
+                            selected={item.id === typeContent}
+                            className={item.id === typeContent ? 'active' : ''}
+                        >
+                            <ListItemButton
+                                onClick={() => handleClickSideBar(item.id)}
+                            >
+                                <ListItemIcon>{item.icon}</ListItemIcon>
+                                <ListItemText primary={item.text} />
+                            </ListItemButton>
+                        </ListItem>
+                    ))}
+                </List>
+            </Grid>
 
-            <Box
-                component="main"
-                sx={{
-                    flexGrow: 1,
-                    p: 3,
-                    width: { sm: `calc(100% - ${drawerWidth}px)` },
-                }}
-            >
-                <Toolbar />
+            {/* Content */}
+            <Grid item xs={12} sm={9} xl={9}>
                 {typeContent === 1 && <ExamList classroomId={classroomId} />}
                 {typeContent === 2 && <MemberList classroomId={classroomId} />}
                 {typeContent === 3 && <Bulletin classroom={classroom} />}
-            </Box>
-        </Box>
+            </Grid>
+        </Grid>
     )
 }
 
 ResponsiveDrawer.propTypes = {
-    /**
-     * Injected by the documentation to work in an iframe.
-     * Remove this when copying and pasting into your project.
-     */
     window: PropTypes.func,
 }
 

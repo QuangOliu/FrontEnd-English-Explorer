@@ -15,23 +15,31 @@ export default function ClassroomCard({ classroom }) {
     const navigate = useNavigate()
 
     useEffect(() => {
-        setDisplayImage('https://picsum.photos/seed/picsum/200/300')
-    }, [])
+        // Tạo URL ảnh từ id của class để mỗi card có ảnh riêng biệt
+        setDisplayImage(`https://picsum.photos/536/354?random=${id}`)
+    }, [id])
 
     const handleClick = () => {
         let data = {
-            classroom: {id},
+            classroom: { id },
         }
-        classmemnerApi.create(data).then((result) => {
-            console.log(result);
-        }).catch((err) => {
-            console.log(err);
-        });
+        classmemnerApi
+            .create(data)
+            .then((result) => {
+                console.log(result)
+            })
+            .catch((err) => {
+                console.log(err)
+            })
         // navigate(`/classrooms/${id}`)
     }
     return (
         <Card sx={{ maxWidth: 345 }}>
-            <CardActionArea onClick={()=> {navigate("/classrooms/" + id)}}>
+            <CardActionArea
+                onClick={() => {
+                    navigate('/classrooms/' + id)
+                }}
+            >
                 <CardMedia
                     component="img"
                     height="140"

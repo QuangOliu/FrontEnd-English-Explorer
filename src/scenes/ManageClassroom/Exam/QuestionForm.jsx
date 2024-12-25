@@ -170,7 +170,7 @@ const QuestionForm = ({ question, onChange }) => {
     }
 
     return (
-        <Box sx={{ mx: 'auto', p: 2 }}>
+        <Box sx={{ mx: 'auto' }}>
             <Grid container spacing={2}>
                 {/* File upload section */}
                 <Grid item xs={6}>
