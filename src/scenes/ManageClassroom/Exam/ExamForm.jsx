@@ -213,7 +213,7 @@ const ExamForm = () => {
                 <Typography variant="h6" sx={{ mt: 2 }}>
                     Questions
                 </Typography>
-                <Box sx={{ mb: 2 }}>
+                <Box sx={{ mb: 2, width: '100%' }}>
                     {formValues.questions.map((_, index) => (
                         <Button
                             key={index}

@@ -19,6 +19,7 @@ import Dropzone from 'react-dropzone'
 import FlexBetween from 'components/FlexBetween'
 import authApi from 'api/authApi'
 import { setTokens } from 'utils/utils'
+import toast from 'react-hot-toast'
 
 const initialValuesRegister = {
     fullname: '',
@@ -36,14 +37,14 @@ const registerSchema = yup.object().shape({
         .string()
         .trim()
         .email('invalide email')
-        .required('Last name is required'),
-    username: yup.string().lowercase().trim().required('Email is required'),
+        .required('Email is required'),
+    username: yup.string().lowercase().trim().required('Username is require'),
     password: yup.string().trim().required('Password is required'),
     // picture: yup.string().required("require"),
 })
 
 const loginSchema = yup.object().shape({
-    username: yup.string().lowercase().trim().required('Email is required'),
+    username: yup.string().lowercase().trim().required('Username is require'),
     password: yup.string().trim().required('Password is required'),
 })
 
@@ -66,7 +67,7 @@ export default function Form() {
                 // Xử lý response thành công
                 // 
                 // dispatch(setLogin(response))
-                
+                toast.success("Login Success")
                 setTokens(response.access_token, response.refresh_token)
                 navigate('/')
             })
@@ -78,6 +79,8 @@ export default function Form() {
                 dispatch(setUser(data))
             })
             .catch((error) => {
+                
+                toast.error("Usernam or Password incorrect")
                 setErrorMessage(error.response.data.message)
                 setOpenLog(true)
             })
@@ -88,6 +91,7 @@ export default function Form() {
             .then((response) => {
                 // Xử lý response thành công
                 
+                toast.success("Register Success")
                 setTokens(response.access_token, response.refresh_token)
                 navigate('/')
             })
@@ -99,6 +103,7 @@ export default function Form() {
                 dispatch(setUser(data))
             })
             .catch((error) => {
+                toast.error("Register Error")
                 setErrorMessage(error.response.data.message)
                 setOpenLog(true)
             })
@@ -253,7 +258,7 @@ export default function Form() {
                 )}
             </Formik>
 
-            <Snackbar
+            {/* z<Snackbar
                 open={openLog}
                 autoHideDuration={6000}
                 onClose={handleClose}
@@ -270,7 +275,7 @@ export default function Form() {
                 >
                     {errorMessage}
                 </Alert>
-            </Snackbar>
+            </Snackbar> */}
         </div>
     )
 }

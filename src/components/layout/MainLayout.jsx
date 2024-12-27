@@ -1,16 +1,18 @@
-import { Grid } from '@mui/material'
-import { useLocation } from 'react-router-dom'
+import { Grid, Box } from '@mui/material'
+import { useLocation, matchPath } from 'react-router-dom'
 import Navbar from 'scenes/global/Navbar'
 import Sidebar from 'components/layout/SideBar'
 import { Toaster } from 'react-hot-toast'
 
 const pathsWithoutNavbarSidebar = ['/login', '/register'] // Đường dẫn không có Navbar và Sidebar
+const pathsWithWildcard = ["/exam/doing/*"] // Các đường dẫn có wildcard
 
 const MainLayout = ({ children }) => {
     const location = useLocation() // Lấy đường dẫn hiện tại
-    const isNoNavbarSidebar = pathsWithoutNavbarSidebar.includes(
-        location.pathname
-    )
+
+    // Kiểm tra nếu đường dẫn là một trong các path không có Navbar và Sidebar
+    const isNoNavbarSidebar = pathsWithoutNavbarSidebar.includes(location.pathname) || 
+        pathsWithWildcard.some(path => matchPath(path, location.pathname))
 
     return (
         <>

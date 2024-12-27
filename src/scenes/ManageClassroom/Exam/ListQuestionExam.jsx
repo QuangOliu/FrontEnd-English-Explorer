@@ -1,27 +1,25 @@
 import { Add, Delete, Edit } from '@mui/icons-material'
-import { Button, Grid, Icon, IconButton } from '@mui/material'
+import {
+    Button,
+    Grid,
+    Icon,
+    IconButton,
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableRow,
+} from '@mui/material'
 import { DataGrid } from '@mui/x-data-grid'
 import { useFormikContext } from 'formik'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import QuestionPopup from './QuestionPopup'
-
-function MaterialButton({ item, onSelect }) {
-    return (
-        <div>
-            <IconButton size="small" onClick={() => onSelect(item, 0)}>
-                <Edit />
-            </IconButton>
-            <IconButton size="small" onClick={() => onSelect(item, 1)}>
-                <Delete />
-            </IconButton>
-        </div>
-    )
-}
 
 export default function ListQuestionExam() {
     const { values, setFieldValue } = useFormikContext()
     const [openEditQuestion, setOpenEditQuestion] = useState(null)
 
+    // Định nghĩa cột
     const columns = [
         { field: 'id', headerName: 'ID', minWidth: 50, maxWidth: 100 },
         { field: 'question', headerName: 'Question', flex: 2, minWidth: 200 },
@@ -38,13 +36,11 @@ export default function ListQuestionExam() {
                     <MaterialButton
                         item={rowData}
                         onSelect={(rowData, method) => {
-                            if (method === 0)
-                                handleEditQuestion(
-                                    rowData,
-                                    values.questions.indexOf(rowData?.row)
-                                )
+                            if (method === 0) handleEditQuestion(rowData)
                             else if (method === 1)
-                                handleDelete(values.questions.indexOf(rowData))
+                                handleDelete(
+                                    values?.questions?.indexOf(rowData)
+                                )
                         }}
                     />
                 )
@@ -52,37 +48,23 @@ export default function ListQuestionExam() {
         },
     ]
 
-    const handleEditQuestion = (question, rowIndex) => {
-        let listCUrrentQuestions = values?.questions || []
-        const formData = { ...question?.row, rowIndex }
-        if (!formData?.questionIndex) {
-            formData.questionIndex = listCUrrentQuestions?.length + 1
-        }
-        console.log(formData);
+    const handleEditQuestion = (question) => {
+        const rowIndex = values?.questions?.indexOf(question)
+        const formData = { choises: [], ...question, rowIndex }
+
         setOpenEditQuestion({
             open: true,
             formData,
             handleClose: () => setOpenEditQuestion(null),
             handleSubmit: (questionvalues) => {
-                console.log({questionvalues})
-                if (rowIndex === undefined) {
-                    setFieldValue('questions', [
-                        ...listCUrrentQuestions,
-                        questionvalues,
-                    ])
+                console.log(questionvalues)
+                let newList = [...values.questions]
+                if (rowIndex === -1 || rowIndex === undefined) {
+                    newList.push(questionvalues)
                 } else {
-                    const newList = listCUrrentQuestions?.reduce(
-                        (acc, item, index) => {
-                            if (index === rowIndex) {
-                                return [...acc, questionvalues]
-                            }
-                            return [...acc, item]
-                        },
-                        []
-                    )
-                    setFieldValue('questions', newList)
+                    newList[rowIndex] = questionvalues
                 }
-                // đóng popup
+                setFieldValue('questions', newList)
                 setOpenEditQuestion(null)
             },
         })
@@ -99,14 +81,80 @@ export default function ListQuestionExam() {
                 variant="outlined"
                 sx={{ marginBottom: '8px' }}
                 startIcon={<Add />}
-                onClick={() => handleEditQuestion(null)}
+                onClick={() => handleEditQuestion(null)} // Truyền null khi thêm mới
             >
                 Thêm mới câu hỏi
             </Button>
-            <Grid item md={12}>
-                <DataGrid rows={values?.questions || []} columns={columns} />
+            <Grid item xl={12} md={12}>
+                {/* Hiển thị bảng câu hỏi */}
+                <QuestionTable
+                    questions={values?.questions || []}
+                    columns={columns}
+                    onEdit={handleEditQuestion}
+                    onDelete={handleDelete}
+                />
             </Grid>
             {openEditQuestion?.open && <QuestionPopup {...openEditQuestion} />}
         </>
+    )
+}
+
+function QuestionTable({ questions, columns, onEdit, onDelete }) {
+    return (
+        <Table>
+            <TableHead>
+                <TableRow>
+                    {columns?.map((col, index) => (
+                        <TableCell key={index}>{col.headerName}</TableCell>
+                    ))}
+                </TableRow>
+            </TableHead>
+            <TableBody>
+                {questions?.map((question, index) => (
+                    <TableRow key={index}>
+                        {columns?.map((col) => {
+                            if (col.field === 'actions') {
+                                return (
+                                    <TableCell key={col.field}>
+                                        <IconButton
+                                            size="small"
+                                            onClick={() =>
+                                                onEdit(question, index)
+                                            }
+                                        >
+                                            <Edit />
+                                        </IconButton>
+                                        <IconButton
+                                            size="small"
+                                            onClick={() => onDelete(index)}
+                                        >
+                                            <Delete />
+                                        </IconButton>
+                                    </TableCell>
+                                )
+                            }
+                            return (
+                                <TableCell key={col.field}>
+                                    {question[col.field]}
+                                </TableCell>
+                            )
+                        })}
+                    </TableRow>
+                ))}
+            </TableBody>
+        </Table>
+    )
+}
+
+function MaterialButton({ item, onSelect }) {
+    return (
+        <div>
+            <IconButton size="small" onClick={() => onSelect(item, 0)}>
+                <Edit />
+            </IconButton>
+            <IconButton size="small" onClick={() => onSelect(item, 1)}>
+                <Delete />
+            </IconButton>
+        </div>
     )
 }
