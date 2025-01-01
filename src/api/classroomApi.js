@@ -14,6 +14,11 @@ const classroomApi = {
         const url = `classrooms/page?page=${page - 1}&size=${size}`
         return axiosClient.get(url)
     },
+    getClassroomsDtoPage(page = 1, size = 10) {
+        // Truyền page-1 để phù hợp với Pageable trong Spring (Spring Boot page index starts at 0)
+        const url = `classrooms/paging-dto?page=${page - 1}&size=${size}`
+        return axiosClient.get(url)
+    },
     getClassroomsByType(Type) {
         const url = `classrooms?type=${Type}`
         return axiosClient.get(url)
@@ -25,7 +30,11 @@ const classroomApi = {
     deleteById(id) {
         const url = `classrooms/${id}`
         return axiosClient.delete(url)
-    }
+    },
+    payment(id) {
+        const url = `classrooms/buy/${id}`
+        return axiosClient.get(url)
+    },
 }
 
 export default classroomApi;

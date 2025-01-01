@@ -21,6 +21,8 @@ import { useNavigate, useLocation } from 'react-router-dom'
 import { useTheme } from '@mui/material/styles'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import ExpandLessIcon from '@mui/icons-material/ExpandLess'
+import WalletIcon from '@mui/icons-material/Wallet';
+import LeaderboardIcon from '@mui/icons-material/Leaderboard';
 
 const menuItems = [
     {
@@ -34,18 +36,6 @@ const menuItems = [
                 icon: <Home />,
                 role: 'ALL',
             },
-            // {
-            //     name: 'Favorites',
-            //     path: '/favorites',
-            //     icon: <FavoriteIcon />,
-            //     role: 'USER',
-            // },
-            // {
-            //     name: 'Bookmarks',
-            //     path: '/bookmarks',
-            //     icon: <BookmarkIcon />,
-            //     role: 'USER',
-            // },
             {
                 name: 'Profile',
                 path: '/profile',
@@ -57,7 +47,7 @@ const menuItems = [
     {
         name: 'Manage', // New group for manage items
         path: '/manage',
-        icon: <CardMembershipIcon />,
+        icon: <LeaderboardIcon />,
         role: 'ADMIN',
         subItems: [
             {
@@ -86,6 +76,12 @@ const menuItems = [
         icon: <CardMembershipIcon />,
         role: 'ALL',
     },
+    {
+        name: 'My Wallet',
+        path: '/wallet',
+        icon: <WalletIcon />,
+        role: 'ALL',
+    }
 ]
 
 const Sidebar = () => {

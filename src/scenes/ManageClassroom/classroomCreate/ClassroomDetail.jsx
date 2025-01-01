@@ -20,28 +20,39 @@ import Bulletin from './Bulletin'
 import ExamList from './ExamList'
 import MemberList from '../Members/MemberList'
 import { Grid } from '@mui/material'
+import PlayLessonIcon from '@mui/icons-material/PlayLesson'
+import LessionList from './LessionList'
 
-const sidebarManu = [
+const sidebarMenu = [
+    {
+        text: 'Lessons',
+        icon: <PlayLessonIcon />,
+        id: 1,
+        component: LessionList, // Assign the component for this item
+    },
     {
         text: 'Exams',
         icon: <MailIcon />,
-        id: 1,
+        id: 2,
+        component: ExamList, // Component for exams
     },
     {
-        text: 'Member',
+        text: 'Members',
         icon: <MailIcon />,
-        id: 2,
+        id: 3,
+        component: MemberList, // Component for members
     },
     {
         text: 'General',
         icon: <MailIcon />,
-        id: 3,
+        id: 4,
+        component: Bulletin, // Component for general info
     },
 ]
 
 function ResponsiveDrawer(props) {
     const { window } = props
-    const [classroom, setclassroom] = useState({})
+    const [classroom, setClassroom] = useState({})
     const [typeContent, setTypeContent] = useState(1)
     const { classroomId } = useParams()
 
@@ -49,7 +60,7 @@ function ResponsiveDrawer(props) {
         classroomApi
             .getById(classroomId)
             .then((result) => {
-                setclassroom(result)
+                setClassroom(result)
             })
             .catch((err) => {
                 console.log(err)
@@ -66,6 +77,9 @@ function ResponsiveDrawer(props) {
     const container =
         window !== undefined ? () => window().document.body : undefined
 
+    // Get the component to render based on the selected content
+    const SelectedComponent = sidebarMenu.find(item => item.id === typeContent)?.component
+
     return (
         <Grid container sx={{ display: 'flex' }} spacing={2}>
             {/* Sidebar */}
@@ -80,16 +94,14 @@ function ResponsiveDrawer(props) {
                 </ListItem>
                 <Divider />
                 <List>
-                    {sidebarManu.map((item) => (
+                    {sidebarMenu.map((item) => (
                         <ListItem
                             key={item.id}
                             disablePadding
                             selected={item.id === typeContent}
                             className={item.id === typeContent ? 'active' : ''}
                         >
-                            <ListItemButton
-                                onClick={() => handleClickSideBar(item.id)}
-                            >
+                            <ListItemButton onClick={() => handleClickSideBar(item.id)}>
                                 <ListItemIcon>{item.icon}</ListItemIcon>
                                 <ListItemText primary={item.text} />
                             </ListItemButton>
@@ -100,9 +112,7 @@ function ResponsiveDrawer(props) {
 
             {/* Content */}
             <Grid item xs={12} sm={9} xl={9}>
-                {typeContent === 1 && <ExamList classroomId={classroomId} />}
-                {typeContent === 2 && <MemberList classroomId={classroomId} />}
-                {typeContent === 3 && <Bulletin classroom={classroom} />}
+                {SelectedComponent && <SelectedComponent classroomId={classroomId} classroom={classroom} />}
             </Grid>
         </Grid>
     )

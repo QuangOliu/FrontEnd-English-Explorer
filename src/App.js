@@ -5,11 +5,7 @@ import NotFound from 'components/NotFound'
 import { useMemo } from 'react'
 import { Toaster } from 'react-hot-toast'
 import { useSelector } from 'react-redux'
-import {
-    BrowserRouter,
-    Route,
-    Routes
-} from 'react-router-dom'
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import ManageDashboad from 'scenes/Admin'
 import ManageQuestion from 'scenes/Admin/ManageQuestion'
 import ManageUser from 'scenes/Admin/ManageUser'
@@ -32,6 +28,11 @@ import ProfilePage from 'scenes/profilePage'
 import QuestionCreate from 'scenes/questionCreate'
 import { AdminRoute, AuthRoute } from 'utils/authChecks'
 import { themeSettings } from './theme'
+import ClassroomCheckout from 'scenes/ManageClassroom/classroomCreate/ClassroomCheckout'
+import PaymentSuccess from 'scenes/Payment/PaymentSuccess'
+import PaymentFailure from 'scenes/Payment/PaymentFailure'
+import PaymentInvalid from 'scenes/Payment/PaymentInvalid'
+import WalletPage from 'scenes/WalletPage'
 
 const NAVIGATION = [
     // Public Routes
@@ -44,6 +45,10 @@ const NAVIGATION = [
 
     // Classrooms
     { path: '/classrooms', element: <AuthRoute element={<ClassroomPage />} /> },
+    {
+        path: '/classrooms/checkout/:classroomId',
+        element: <AuthRoute element={<ClassroomCheckout />} />,
+    },
     {
         path: '/classrooms/:classroomId',
         element: <AuthRoute element={<ClassroomDetail />} />,
@@ -101,6 +106,14 @@ const NAVIGATION = [
     { path: '/manage/users/create', element: <RegisterForm /> },
     { path: '/manage/users', element: <ManageUser /> },
 
+    // Payment Routes
+    { path: '/payment/success', element: <PaymentSuccess /> },
+    { path: '/payment/failure', element: <PaymentFailure /> },
+    { path: '/payment/invalid', element: <PaymentInvalid /> },
+
+    // Payment Routes
+    { path: '/wallet', element: <AuthRoute element={<WalletPage />} /> },
+
     // Catch-All Route for 404
     { path: '*', element: <NotFound /> },
 ]
@@ -111,25 +124,25 @@ function App() {
 
     return (
         <div className="app">
-        <BrowserRouter>
-            <ThemeProvider theme={theme}>
-                <CssBaseline />
-                <Routes>
-                    {NAVIGATION.map((route, index) => (
-                        <Route
-                            key={index}
-                            path={route.path}
-                            element={
-                                // Bọc các route trong MainLayout
-                                <MainLayout>{route.element}</MainLayout>
-                            }
-                        />
-                    ))}
-                </Routes>
-                <Toaster />
-            </ThemeProvider>
-        </BrowserRouter>
-    </div>
+            <BrowserRouter>
+                <ThemeProvider theme={theme}>
+                    <CssBaseline />
+                    <Routes>
+                        {NAVIGATION.map((route, index) => (
+                            <Route
+                                key={index}
+                                path={route.path}
+                                element={
+                                    // Bọc các route trong MainLayout
+                                    <MainLayout>{route.element}</MainLayout>
+                                }
+                            />
+                        ))}
+                    </Routes>
+                    <Toaster />
+                </ThemeProvider>
+            </BrowserRouter>
+        </div>
     )
 }
 
