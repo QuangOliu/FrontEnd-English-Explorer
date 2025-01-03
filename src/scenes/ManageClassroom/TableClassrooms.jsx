@@ -71,6 +71,7 @@ function TableClassroom({ data, setData, submitDelete }) {
         accessType: '',
         name: '',
         description: '',
+        cost: 0,
     })
     const user = useSelector((state) => state.user)
     const isAdmin = user?.role === 'admin'
@@ -137,13 +138,17 @@ function TableClassroom({ data, setData, submitDelete }) {
     }
 
     const handleConfirmDelete = () => {
-        classroomApi.deleteById(formValues?.id).then((result) => {
-            toast.success("Xóa thành công")
-        }).then(data => {
-            loadData();
-        }).catch((err) => {
-            toast.error("Xóa thất bại")
-        });
+        classroomApi
+            .deleteById(formValues?.id)
+            .then((result) => {
+                toast.success('Xóa thành công')
+            })
+            .then((data) => {
+                loadData()
+            })
+            .catch((err) => {
+                toast.error('Xóa thất bại')
+            })
     }
 
     const handleSubmit = (e) => {
@@ -154,7 +159,8 @@ function TableClassroom({ data, setData, submitDelete }) {
             name: formValues?.name,
             description: formValues?.description,
             accessType: formValues?.accessType,
-        };
+            cost: formValues?.cost,
+        }
         classroomApi
             .create(newForm)
             .then((result) => {
@@ -352,7 +358,7 @@ function TableClassroom({ data, setData, submitDelete }) {
                                                             palette.primary
                                                                 .main,
                                                         color: 'white',
-                                                        marginRight:"8px",
+                                                        marginRight: '8px',
                                                         '&:hover': {
                                                             color: palette
                                                                 .primary.main,
@@ -420,7 +426,7 @@ function TableClassroom({ data, setData, submitDelete }) {
                             '&:hover': { color: palette.primary.main },
                         }}
                         onClick={() => {
-                            setFormValues(null);
+                            setFormValues(null)
                             setOpen(true)
                         }}
                     >
@@ -435,7 +441,9 @@ function TableClassroom({ data, setData, submitDelete }) {
                         onSubmit: handleSubmit,
                     }}
                 >
-                    <DialogTitle>{formValues?.id ? "Add " :"Edit "}Classroom</DialogTitle>
+                    <DialogTitle>
+                        {formValues?.id ? 'Add ' : 'Edit '}Classroom
+                    </DialogTitle>
                     <DialogContent>
                         <DialogContentText>
                             To create a new classroom, please fill in the
@@ -457,6 +465,18 @@ function TableClassroom({ data, setData, submitDelete }) {
                             name="description"
                             label="Description"
                             value={formValues?.description}
+                            onChange={handleChange}
+                            fullWidth
+                            variant="standard"
+                        />
+
+                        {/* Cost */}
+                        <TextField
+                            type="number"
+                            margin="dense"
+                            name="cost"
+                            label="Cost"
+                            value={formValues?.cost || ''}
                             onChange={handleChange}
                             fullWidth
                             variant="standard"
@@ -483,7 +503,9 @@ function TableClassroom({ data, setData, submitDelete }) {
                     </DialogContent>
                     <DialogActions>
                         <Button onClick={handleClose}>Cancel</Button>
-                        <Button type="submit">{formValues?.id ? "Edit " :"Add "} Classroom</Button>
+                        <Button type="submit">
+                            {formValues?.id ? 'Edit ' : 'Add '} Classroom
+                        </Button>
                     </DialogActions>
                 </Dialog>
             </Box>

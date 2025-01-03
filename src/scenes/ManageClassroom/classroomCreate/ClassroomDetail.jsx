@@ -51,7 +51,6 @@ const sidebarMenu = [
 ]
 
 function ResponsiveDrawer(props) {
-    const { window } = props
     const [classroom, setClassroom] = useState({})
     const [typeContent, setTypeContent] = useState(1)
     const { classroomId } = useParams()
@@ -72,11 +71,6 @@ function ResponsiveDrawer(props) {
     }
 
     const navigate = useNavigate()
-    const theme = useTheme()
-    const { palette } = useTheme()
-    const container =
-        window !== undefined ? () => window().document.body : undefined
-
     // Get the component to render based on the selected content
     const SelectedComponent = sidebarMenu.find(item => item.id === typeContent)?.component
 

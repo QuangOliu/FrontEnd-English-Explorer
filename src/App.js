@@ -33,6 +33,7 @@ import PaymentSuccess from 'scenes/Payment/PaymentSuccess'
 import PaymentFailure from 'scenes/Payment/PaymentFailure'
 import PaymentInvalid from 'scenes/Payment/PaymentInvalid'
 import WalletPage from 'scenes/WalletPage'
+import CoursePageDetail from 'scenes/CoursePageDetail/Index'
 
 const NAVIGATION = [
     // Public Routes
@@ -75,6 +76,10 @@ const NAVIGATION = [
         element: <AuthRoute element={<QuestionCreate />} />,
     },
 
+    {
+        path: '/course/:courseId',
+        element: <AuthRoute element={<CoursePageDetail />} />,
+    },
     // Exams
     { path: '/exam', element: <AuthRoute element={<ExamForm />} /> },
     {
