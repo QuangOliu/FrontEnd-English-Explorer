@@ -52,6 +52,12 @@ const head = [
     {
         numeric: true,
         disablePadding: false,
+        lable: 'Price',
+        id: 'cost',
+    },
+    {
+        numeric: true,
+        disablePadding: false,
         lable: 'Access Type',
         id: 'accessType',
     },
@@ -259,31 +265,6 @@ function TableClassroom({ data, setData, submitDelete }) {
                         {head && (
                             <TableHead>
                                 <TableRow>
-                                    {/* {submitDelete && (
-                                        <StyledTableCell align="left">
-                                            <Checkbox
-                                                color="primary"
-                                                sx={{
-                                                    backgroundColor: 'white',
-                                                }}
-                                                indeterminate={
-                                                    selected.length > 0 &&
-                                                    selected.length <
-                                                        data.length
-                                                }
-                                                checked={
-                                                    selected.length > 0 &&
-                                                    selected.length ===
-                                                        data.length
-                                                }
-                                                onChange={handleSelectAllClick}
-                                                inputProps={{
-                                                    'aria-label':
-                                                        'select all desserts',
-                                                }}
-                                            />
-                                        </StyledTableCell>
-                                    )} */}
                                     {head.map((item) => {
                                         return (
                                             <StyledTableCell key={item.id}>
@@ -310,33 +291,7 @@ function TableClassroom({ data, setData, submitDelete }) {
                                                 handleClickRow(row.id)
                                             }}
                                         >
-                                            {/* {submitDelete && (
-                                                <StyledTableCell
-                                                    align="left"
-                                                    onClick={(event) => {
-                                                        if (
-                                                            row.role !== 'admin'
-                                                        )
-                                                            handleClickRow(
-                                                                event,
-                                                                row.id
-                                                            )
-                                                    }}
-                                                >
-                                                    <Checkbox
-                                                        color="primary"
-                                                        sx={{
-                                                            backgroundColor:
-                                                                'white',
-                                                        }}
-                                                        checked={isItemSelected}
-                                                        disabled={
-                                                            row.role === 'admin'
-                                                        }
-                                                    />
-                                                </StyledTableCell>
-                                            )} */}
-
+                                            
                                             {head.map((column) => (
                                                 <StyledTableCell
                                                     key={column.id}
@@ -352,7 +307,7 @@ function TableClassroom({ data, setData, submitDelete }) {
                                                     onClick={(e) => {
                                                         handleClickEdit(e, row)
                                                     }}
-                                                    size="large"
+                                                    size="small"
                                                     sx={{
                                                         backgroundColor:
                                                             palette.primary
@@ -365,7 +320,7 @@ function TableClassroom({ data, setData, submitDelete }) {
                                                         },
                                                     }}
                                                 >
-                                                    <EditIcon fontSize="inherit" />
+                                                    <EditIcon fontSize="small" />
                                                 </IconButton>
 
                                                 <IconButton
@@ -375,7 +330,7 @@ function TableClassroom({ data, setData, submitDelete }) {
                                                             row
                                                         )
                                                     }}
-                                                    size="large"
+                                                    size="small"
                                                     sx={{
                                                         backgroundColor:
                                                             palette.primary
@@ -387,7 +342,7 @@ function TableClassroom({ data, setData, submitDelete }) {
                                                         },
                                                     }}
                                                 >
-                                                    <DeleteIcon fontSize="inherit" />
+                                                    <DeleteIcon fontSize="small" />
                                                 </IconButton>
                                             </StyledTableCell>
                                         </StyledTableRow>

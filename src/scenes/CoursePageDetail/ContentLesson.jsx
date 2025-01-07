@@ -15,6 +15,8 @@ import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { useTheme } from '@emotion/react';
 import progressApi from 'api/progressApi';
+import { isAdminOrOwn } from 'utils/utils';
+import { useSelector } from 'react-redux';
 
 function useQuery() {
   return new URLSearchParams(useLocation().search);
@@ -30,6 +32,7 @@ const ContentLesson = ({ listLesson }) => {
   const [loading, setLoading] = useState(false);
   const [editing, setEditing] = useState(false);
 
+  const user = useSelector((state) => state.user);
   const theme = useTheme();
   const alt = theme.palette.background.alt;
 
@@ -79,6 +82,20 @@ const ContentLesson = ({ listLesson }) => {
       navigate(`/course/${courseId}?lessonId=${listLesson[newIndex].id}`);
     }
   };
+  
+  useEffect(() => {
+    // Nếu không có lessonId, chuyển hướng đến bài đầu tiên
+    if (!lessonId && listLesson.length > 0) {
+      navigate(`/course/${courseId}?lessonId=${listLesson[0].id}`, { replace: true });
+    } else if (lessonId) {
+      setLoading(true);
+      lessonApi
+        .getById(lessonId)
+        .then((res) => setLesson(res))
+        .catch(() => toast.error('Failed to fetch lesson'))
+        .finally(() => setLoading(false));
+    }
+  }, [lessonId, listLesson, courseId, navigate]);
 
   return (
     <Box sx={{ paddingTop: '20px' }}>
@@ -103,9 +120,11 @@ const ContentLesson = ({ listLesson }) => {
                 {lesson.title || 'Lesson Title'}
               </Typography>
             )}
-            <IconButton color="primary" onClick={handleToggleEditing}>
-              <Edit />
-            </IconButton>
+            {isAdminOrOwn(user, lesson) && (
+              <IconButton color="primary" onClick={handleToggleEditing}>
+                <Edit />
+              </IconButton>
+            )}
           </Box>
 
           {editing ? (

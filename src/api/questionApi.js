@@ -5,6 +5,10 @@ const questionApi = {
         const url = 'questions'
         return axiosClient.get(url)
     },
+    deleteById(id) {
+        const url = `questions/${id}`
+        return axiosClient.delete(url)
+    },
     create(data) {
         const url = `questions`
         return axiosClient.post(url, data)

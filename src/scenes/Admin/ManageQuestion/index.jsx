@@ -1,8 +1,5 @@
 import { Typography } from '@mui/material'
-import { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
-import { removeManyFromCart, setItems } from 'state'
-import questionApi from 'api/questionApi'
 import TableQuestions from './TableQuestions'
 
 const btn = {

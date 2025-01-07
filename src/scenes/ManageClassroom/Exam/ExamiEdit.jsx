@@ -28,7 +28,6 @@ const ExamiEdit = () => {
     });
 
     const { examId } = useParams();
-    const [expandedQuestionIndex, setExpandedQuestionIndex] = useState(null);
 
     const navigate = useNavigate();
 

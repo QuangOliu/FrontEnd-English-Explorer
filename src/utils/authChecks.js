@@ -1,5 +1,5 @@
 import { Navigate, useNavigate } from 'react-router-dom'
-import { isAdmin, isAuth } from './utils'
+import { isAdmin, isAuth, isTeacher } from './utils'
 import authApi from 'api/authApi'
 import { useEffect, useState } from 'react'
 import { setLogin, setUser } from 'state'
@@ -51,7 +51,7 @@ export const AdminRoute = ({ element }) => {
     }
 
     // Kiểm tra quyền admin
-    return isAdmin(user) ? element : <Navigate to="/" />;
+    return (isAdmin(user) || isTeacher(user)) ? element : <Navigate to="/" />;
 };
 
 export const handleGetCurrentUser = (setUser) => {

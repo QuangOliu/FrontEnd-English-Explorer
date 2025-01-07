@@ -6,7 +6,7 @@ const examApi = {
         return axiosClient.get(url)
     },
     save(data) {
-        const url = `exams`
+        const url = `exams/save`
         return axiosClient.post(url, data)
     },
     getExamsPage(page = 1, size = 10) {

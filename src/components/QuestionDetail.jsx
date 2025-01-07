@@ -38,8 +38,9 @@ const QuestionDetail = ({ questionProp }) => {
             setImage('')
             setAudio('')
             setIsAudioPlaying(false)
-            setSelectedChoice(null)
         }
+        
+        setSelectedChoice(null)
     }, [questionProp]) // Trigger effect when questionProp changes
 
     // Function to handle audio play when the button is clicked

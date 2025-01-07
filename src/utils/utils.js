@@ -33,6 +33,30 @@ export const isAdmin = (user) => {
     return user.roles.some((role) => role.name === "ADMIN");
 };
 
+export const isTeacher = (user) => {
+    if (!user || !user.roles) return false; // Kiểm tra user hợp lệ
+    return user.roles.some((role) => role.name === "TEACHER");
+};
+
+export const isAdminOrTeacher = (user) => {
+    if (!user || !user.roles) return false; // Kiểm tra user hợp lệ
+    return user.roles.some((role) => role.name === "ADMIN" || role.name === "TEACHER");
+};
+export const isAdminOrOwn = (user, obj) => {
+    if (!user || !user.roles) return false; // Kiểm tra user hợp lệ
+    
+    // Kiểm tra nếu user có vai trò ADMIN hoặc TEACHER
+    const isAdminOrTeacher = user.roles.some((role) => role.name === "ADMIN");
+
+    // Kiểm tra nếu user là chủ sở hữu
+    const isOwner = user?.username === obj?.createdBy; // Giả định user có thuộc tính id và createdBy là userId
+
+    // Trả về true nếu là ADMIN/TEACHER hoặc là chủ sở hữu
+    console.log(isAdminOrTeacher, isOwner)
+    return isAdminOrTeacher || isOwner;
+};
+
+
 // Utility function to check if the user is authenticated
 export function isAuth(user) {
     if (!user) return false

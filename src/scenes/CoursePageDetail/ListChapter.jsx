@@ -12,6 +12,9 @@ import { useEffect, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import FormChapter from './FormChapter';
 import FormLesson from './FormLesson'; // Import FormLesson component
+import courseApi from 'api/courseApi';
+import { isAdminOrOwn } from 'utils/utils';
+import { useSelector } from 'react-redux';
 
 function useQuery() {
   return new URLSearchParams(useLocation().search);
@@ -19,6 +22,7 @@ function useQuery() {
 
 const ListChapter = ({ setListLesson }) => {
   const [chapters, setChapters] = useState([]);
+  const [course, setCourse] = useState({});
   const [openChapters, setOpenChapters] = useState({});
   const [creatingLessonForChapter, setCreatingLessonForChapter] =
     useState(null);
@@ -47,8 +51,22 @@ const ListChapter = ({ setListLesson }) => {
       });
   };
 
+  const fetchCourse = () => {
+    courseApi
+      .getById(courseId)
+      .then((result) => {
+        setCourse(result);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const user = useSelector((state) => state.user);
+
   useEffect(() => {
     fetchChapter();
+    fetchCourse();
   }, [courseId]);
 
   const toggleChapter = (chapterId) => {
@@ -106,7 +124,7 @@ const ListChapter = ({ setListLesson }) => {
               onClick={() => toggleChapter(chapter.id)}
               selected={isChapterActive(chapter.id)} // Kiểm tra trạng thái active
             >
-              <ListItemText primary={chapter.title} />
+              <ListItemText primary={<strong>{chapter.title}</strong>} />
               {openChapters[chapter.id] ? <ExpandLess /> : <ExpandMore />}
             </ListItemButton>
 
@@ -129,17 +147,20 @@ const ListChapter = ({ setListLesson }) => {
               </List>
 
               {/* Sử dụng FormLesson tại đây */}
-              <FormLesson
-                creatingLessonForChapter={creatingLessonForChapter}
-                setCreatingLessonForChapter={setCreatingLessonForChapter}
-                chapter={chapter}
-                handleAfterSubmit={fetchChapter}
-              />
+              {isAdminOrOwn(user, course) && (
+                <FormLesson
+                  creatingLessonForChapter={creatingLessonForChapter}
+                  setCreatingLessonForChapter={setCreatingLessonForChapter}
+                  chapter={chapter}
+                  handleAfterSubmit={fetchChapter}
+                />
+              )}
             </Collapse>
           </div>
         ))}
-
-        <FormChapter handleAfterSubmit={fetchChapter} />
+        {isAdminOrOwn(user, course) && (
+          <FormChapter handleAfterSubmit={fetchChapter} />
+        )}
       </List>
     </Box>
   );
