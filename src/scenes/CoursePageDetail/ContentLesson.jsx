@@ -82,11 +82,13 @@ const ContentLesson = ({ listLesson }) => {
       navigate(`/course/${courseId}?lessonId=${listLesson[newIndex].id}`);
     }
   };
-  
+
   useEffect(() => {
     // Nếu không có lessonId, chuyển hướng đến bài đầu tiên
     if (!lessonId && listLesson.length > 0) {
-      navigate(`/course/${courseId}?lessonId=${listLesson[0].id}`, { replace: true });
+      navigate(`/course/${courseId}?lessonId=${listLesson[0].id}`, {
+        replace: true,
+      });
     } else if (lessonId) {
       setLoading(true);
       lessonApi
@@ -98,7 +100,7 @@ const ContentLesson = ({ listLesson }) => {
   }, [lessonId, listLesson, courseId, navigate]);
 
   return (
-    <Box sx={{ paddingTop: '20px' }}>
+    <Box padding={1}>
       {loading ? (
         <CircularProgress />
       ) : (

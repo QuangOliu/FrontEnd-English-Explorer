@@ -16,7 +16,7 @@ import toast, { Toaster } from 'react-hot-toast'
 import fileApi from 'api/fileApi'
 import { useLocation } from 'react-router-dom'
 
-const skillTypes = ['READING', 'WRITING', 'LISTENING', 'SPEAKING']
+const skillTypes = ['READING', 'LISTENING']
 const levelTypes = ['BEGINNER', 'INTERMEDIATE', 'ADVANCED']
 
 const QuestionForm = ({ question, onChange }) => {

@@ -178,60 +178,6 @@ function TableUsers({ data, btn, submitDelete }) {
     return (
         <Box>
             <Box m="0 auto">
-                {submitDelete && (
-                    <Toolbar
-                        sx={{
-                            pl: { sm: 2 },
-                            pr: { xs: 1, sm: 1 },
-                            ...(selected.length > 0 && {
-                                bgcolor: (theme) =>
-                                    alpha(
-                                        theme.palette.primary.main,
-                                        theme.palette.action.activatedOpacity
-                                    ),
-                            }),
-                        }}
-                    >
-                        {selected.length > 0 ? (
-                            <Typography
-                                sx={{ flex: '1 1 100%' }}
-                                color="inherit"
-                                variant="subtitle1"
-                                component="div"
-                            >
-                                {selected.length} selected
-                            </Typography>
-                        ) : (
-                            <Typography
-                                sx={{ flex: '1 1 100%' }}
-                                variant="h6"
-                                id="tableTitle"
-                                component="div"
-                            >
-                                Nutrition
-                            </Typography>
-                        )}
-
-                        {selected.length > 0 ? (
-                            <Tooltip title="Delete">
-                                <IconButton
-                                    onClick={() => {
-                                        setActionAllIn(true)
-                                        handleClickOpen()
-                                    }}
-                                >
-                                    <DeleteIcon />
-                                </IconButton>
-                            </Tooltip>
-                        ) : (
-                            <Tooltip title="Filter list">
-                                <IconButton>
-                                    <FilterListIcon />
-                                </IconButton>
-                            </Tooltip>
-                        )}
-                    </Toolbar>
-                )}
 
                 <TableContainer>
                     <Table sx={{ minWidth: 700 }} aria-label="customized table">
@@ -239,31 +185,6 @@ function TableUsers({ data, btn, submitDelete }) {
                         {head && (
                             <TableHead>
                                 <TableRow>
-                                    {submitDelete && (
-                                        <StyledTableCell align="left">
-                                            <Checkbox
-                                                color="primary"
-                                                sx={{
-                                                    backgroundColor: 'white',
-                                                }}
-                                                indeterminate={
-                                                    selected.length > 0 &&
-                                                    selected.length <
-                                                        data.length
-                                                }
-                                                checked={
-                                                    selected.length > 0 &&
-                                                    selected.length ===
-                                                        data.length
-                                                }
-                                                onChange={handleSelectAllClick}
-                                                inputProps={{
-                                                    'aria-label':
-                                                        'select all desserts',
-                                                }}
-                                            />
-                                        </StyledTableCell>
-                                    )}
                                     {head.map((item) => {
                                         return (
                                             <StyledTableCell key={item.id}>
@@ -285,33 +206,6 @@ function TableUsers({ data, btn, submitDelete }) {
                                     const isItemSelected = isSelected(row.id)
                                     return (
                                         <StyledTableRow key={row.id}>
-                                            {submitDelete && (
-                                                <StyledTableCell
-                                                    align="left"
-                                                    onClick={(event) => {
-                                                        if (
-                                                            row.role !== 'admin'
-                                                        )
-                                                            handleClick(
-                                                                event,
-                                                                row.id
-                                                            )
-                                                    }}
-                                                >
-                                                    <Checkbox
-                                                        color="primary"
-                                                        sx={{
-                                                            backgroundColor:
-                                                                'white',
-                                                        }}
-                                                        checked={isItemSelected}
-                                                        disabled={
-                                                            row.role === 'admin'
-                                                        }
-                                                    />
-                                                </StyledTableCell>
-                                            )}
-
                                             <StyledTableCell align="left">
                                                 <Link to={row?.linkTo}>
                                                     {row?.id}

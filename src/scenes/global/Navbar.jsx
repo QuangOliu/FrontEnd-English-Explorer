@@ -44,11 +44,11 @@ const Navbar = () => {
     const fullName = `${user?.fullname}`
 
     return (
-        <FlexBetween padding="1rem 5%" backgroundColor={alt}>
-            <FlexBetween gap="1.75rem">
+        <FlexBetween padding="0 5%" height="68px" backgroundColor={alt}>
+            <FlexBetween>
                 <Typography
                     fontWeight="bold"
-                    fontSize="clamp(1rem, 2rem, 2.25rem)"
+                    fontSize="30px"
                     color="primary"
                     onClick={() => navigate('/')}
                     sx={{
@@ -63,9 +63,7 @@ const Navbar = () => {
             </FlexBetween>
             <FlexBetween gap={'20px'}>
                 <Tooltip
-                    title={
-                        theme.palette.mode === 'dark' ? 'Dark mode' : 'Light Mode'
-                    }
+                    title={theme.palette.mode === 'dark' ? 'Dark mode' : 'Light Mode'}
                 >
                     <IconButton onClick={() => dispatch(setMode())}>
                         {theme.palette.mode === 'dark' ? (
@@ -91,7 +89,8 @@ const Navbar = () => {
                             sx={{
                                 backgroundColor: neutralLight,
                                 borderRadius: '0.25rem',
-                                p: '0.25rem 1rem',
+                                p: '0.2rem 1rem',
+                                height: '60px', // Cập nhật chiều cao của Select
                                 '& .MuiSvgIcon-root': {
                                     pr: '0.25rem',
                                     width: '3rem',

@@ -5,7 +5,7 @@ function Bulletin({ classroom }) {
     console.log(classroom);
     return (
         <Box>
-            {classroom.description ? (
+            {classroom.descriptions ? (
                 <Typography sx={{ marginBottom: 2 }}>{classroom.description}</Typography>
             ) : (
                 <Typography sx={{ marginBottom: 2 }}>

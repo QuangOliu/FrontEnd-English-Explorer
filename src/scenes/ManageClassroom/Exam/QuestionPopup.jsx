@@ -16,7 +16,7 @@ import fileApi from 'api/fileApi'
 import PopupForm from 'common/PopupForm'
 import toast from 'react-hot-toast'
 
-const skillTypes = ['READING', 'WRITING', 'LISTENING', 'SPEAKING']
+const skillTypes = ['READING', 'LISTENING']
 const levelTypes = ['BEGINNER', 'INTERMEDIATE', 'ADVANCED']
 
 export default function QuestionPopup({ open, formData, handleClose, handleSubmit }) {
